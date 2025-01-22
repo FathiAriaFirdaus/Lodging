@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <% if (reservationData.length > 0) { %>
+          <% reservationData.forEach(reservation => { %>
+            <div>
+            <a href="/detailReservation/<%= reservation.id %>">
+              <img src="/uploads/<%= reservation.Room.roomImage %>" alt="Room Image" style="width: 200px;height: auto;">
+              <p><%= reservation.Room.roomName %></p>
+              <p><%= reservation.Room.roomType %></p>
+              <p><%= reservation.totalPrice %></p>
+              <p><%= reservation.status %></p>
+            </a>
+            
+            <% if (reservation.status === "pending"){ %>
+              <form action="/deleteReservation/<%= reservation.id %>" method="POST">
+                <input type="hidden" name="_method" value="DELETE">
+                <button type="submit">Delete</button>
+              </form>
+            <%  }%>
+          </div>
+          <% }); %>
+        <% } else { %>
+          <p>There are no reservation Currently</p>
+        <% } %>
+        </div>
+</body>
+</html>

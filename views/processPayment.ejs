@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+    <script>
+        function validatePayment(event) {
+            // Prevent default form submission
+            event.preventDefault();
+
+            // Get the total price from the data-value attribute
+            const totalPrice = parseInt(document.getElementById("totalPrice").dataset.value);
+            const amountPaid = parseInt(document.getElementById("amountPaid").value);
+            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked');
+
+            // Validate payment method selection
+            if (!paymentMethod) {
+                alert("Please select a payment method.");
+                return;
+            }
+
+            // Validate amount paid
+            if (isNaN(amountPaid) || amountPaid !== totalPrice) {
+                alert(`Amount paid must equal the total price: ${totalPrice}`);
+                return;
+            }
+
+            // If validation passes, submit the form
+            event.target.submit();
+        }
+    </script>
+</head>
+<body>
+    <h1>Payment</h1>
+    <p>Name: <%= reservationSingleData.User.name %></p>
+    <p>Room: <%= reservationSingleData.Room.roomName %></p>
+    <p id="totalPrice" data-value="<%= reservationSingleData.totalPrice %>">
+        Total Price: <%= reservationSingleData.totalPrice %>
+    </p>
+    
+    <form action="/pay/<%= reservationSingleData.id %>" method="post" onsubmit="validatePayment(event)">
+        <label for="amountPaid">Amount Paid:</label>
+        <input type="number" name="amountPaid" id="amountPaid" max="<%= reservationSingleData.totalPrice %>" required>
+
+        <p>Select Payment Method:</p>
+        <label>
+            <input type="radio" name="paymentMethod" value="cash" required>
+            Cash
+        </label>
+        <br>
+        <label>
+            <input type="radio" name="paymentMethod" value="credit card" disabled>
+            Credit Card (Disabled)
+        </label>
+        <br>
+
+        <button type="submit">Pay</button>
+    </form>
+</body>
+</html>

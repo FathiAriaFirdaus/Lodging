@@ -1,0 +1,84 @@
+<!-- <%- include('partials/header') %>
+
+
+<div class="jumbotron centered">
+  <div class="container">
+    <i class="fas fa-key fa-6x"></i>
+    <h1 class="display-3">Secrets</h1>
+    <p class="lead">Don't keep your secrets, share them anonymously!</p>
+    <hr>
+    <a class="btn btn-light btn-lg" href="/register" role="button">Register</a>
+    <a class="btn btn-dark btn-lg" href="/login" role="button">Login</a>
+
+  </div>
+</div>
+
+<%- include('partials/footer') %> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <nav>
+    <ul>
+      <li>room</li>
+      <li>about</li>
+      <li><a href="/logout">logout</a></li>
+      <li><a href="/reservation">reservation</a></li>
+      <li><a href="/addRoom">add room</a></li>
+    </ul>
+  </nav>
+
+  
+  <h1>Trinity Lodge</h1>
+
+  <div>
+    <form action="/filterRoom" method="get">
+      <label for="roomMinPrice">Minimum Price</label>
+      <input type="number" name="roomMinPrice" id="roomMinPrice">
+
+      <label for="roomMaxPrice">Maximum Price</label>
+      <input type="number" name="roomMaxPrice" id="roomMaxPrice">
+
+      <label for="roomCapacity">Capacity</label>
+      <select name="roomCapacity" id="roomCapacity">
+        <option value=1>one</option>
+        <option value=2>two</option>
+        <option value=4>four</option>
+      </select>
+
+      <label for="roomType">Type</label>
+      <select name="roomType" id="roomType">
+        <option value="single">single</option>
+        <option value="double">double</option>
+        <option value="suite">suite</option>
+      </select>
+      <button type="submit">search</button>
+    </form>
+  </div>
+
+  <h2>Best Deal</h2>
+  
+  <div>
+  <% if (roomData.length > 0) { %>
+    <% roomData.forEach(room => { %>
+      <div>
+      <a href="/detailRoom/<%= room.id %>">
+        <img src="/uploads/<%= room.roomImage %>" alt="Room Image" style="width: 200px;height: auto;">
+        <p><%= room.roomName %></p>
+        <p><%= room.roomType %></p>
+        <p><%= room.roomPrice %>$</p>
+      </a>
+    </div>
+    <% }); %>
+  <% } else { %>
+    <p>No room available currently</p>
+  <% } %>
+  </div>
+
+</body>
+</html>

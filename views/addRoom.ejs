@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Add New Room</h1>
+    <form action="/addRoom" method="post" enctype="multipart/form-data">
+
+        <label for="rommName">Room Name</label>
+        <input type="text" id="roomName" name="roomName" required>
+        <br><br>
+
+        <label for="roomType">Room Type</label>
+        <select name="roomType" id="roomType" required>
+            <option value="single">Single</option>
+            <option value="double">Double</option>
+            <option value="suite">Suite</option>
+        </select>
+        <br><br>
+
+        <label for="roomCapacity">Room Capacity</label>
+        <select name="roomCapacity" id="roomCapacity">
+            <option value=1>one</option>
+            <option value=2>two</option>
+            <option value=4>four</option>
+        </select>
+        <br><br>
+
+        <label for="roomPrice">Room Price</label>
+        <input type="number" id="roomPrice" name="roomPrice" required>
+        <br><br>
+
+        <label for="roomDescription">Room Description</label>
+        <textarea name="roomDescription" id="roomDescription" rows="4" required></textarea>
+        <br><br>
+
+        <label for="roomImage">Room Image</label>
+        <input type="file" name="roomImage" id="roomImage" accept="image/*" required>
+        <br><br>
+
+        <button type="submit">Add Room</button>
+    </form>
+</body>
+</html>

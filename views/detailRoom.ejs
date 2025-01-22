@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room Detail</title>
+    <script>
+        function calculatePrice() {
+            const checkInInput = document.getElementById("checkInDate");
+            const checkOutInput = document.getElementById("checkOutDate");
+            const roomPriceInput = document.getElementById("roomPrice");
+
+            // Ensure the inputs have values
+            if (!checkInInput.value || !checkOutInput.value || !roomPriceInput.textContent) {
+                document.getElementById("totalPrice").textContent = "Please select valid dates";
+                document.getElementById("totalPriceInput").value = "";
+                return;
+            }
+
+            const checkInDate = new Date(checkInInput.value);
+            const checkOutDate = new Date(checkOutInput.value);
+            const roomPrice = parseInt(roomPriceInput.textContent);
+
+            if (checkInDate && checkOutDate && !isNaN(roomPrice)) {
+                const timeDiff = checkOutDate - checkInDate;
+                const dayDiff = timeDiff / (1000 * 60 * 60 * 24);
+
+                if (dayDiff > 0) {
+                    const totalPrice = dayDiff * roomPrice;
+                    document.getElementById("totalPrice").textContent = `Total price: $${totalPrice}`;
+                    document.getElementById("totalPriceInput").value = totalPrice;
+                } else {
+                    document.getElementById("totalPrice").textContent = "Invalid date selected";
+                    document.getElementById("totalPriceInput").value = "";
+                }
+            } else {
+                document.getElementById("totalPrice").textContent = "Please select valid dates";
+                document.getElementById("totalPriceInput").value = "";
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Room Detail</h1>
+    <img src="/uploads/<%= roomSingleData.roomImage %>" alt="Room Image">
+    <h2><%= roomSingleData.roomName %></h2>
+    <p>Capacity: <%= roomSingleData.roomCapacity %></p>
+    <p>Type: <%= roomSingleData.roomType %></p>
+    <p>Price per day: $<span id="roomPrice"><%= roomSingleData.roomPrice %></span></p>
+    <p>Description: <%= roomSingleData.roomDescription %></p>
+
+    <!-- Form for date selection -->
+    <form>
+        <label for="checkInDate">Check In:</label>
+        <input type="date" name="checkInDate" id="checkInDate" oninput="calculatePrice()">
+        
+        <label for="checkOutDate">Check Out:</label>
+        <input type="date" name="checkOutDate" id="checkOutDate" oninput="calculatePrice()">
+    </form>
+
+    <p id="totalPrice">Total price:</p>
+
+    <!-- Reservation Form -->
+    <form action="/addReservation/<%= roomSingleData.id %>" method="post">
+        <input type="hidden" name="checkInDate" id="hiddenCheckInDate">
+        <input type="hidden" name="checkOutDate" id="hiddenCheckOutDate">
+        <input type="hidden" name="totalPrice" id="totalPriceInput">
+        <input type="hidden" name="roomPrice" value="<%= roomSingleData.roomPrice %>">
+
+        <button type="submit" onclick="
+            document.getElementById('hiddenCheckInDate').value = document.getElementById('checkInDate').value;
+            document.getElementById('hiddenCheckOutDate').value = document.getElementById('checkOutDate').value;
+        ">Reserve this room</button>
+    </form>
+</body>
+</html>

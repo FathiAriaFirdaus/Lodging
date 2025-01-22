@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Reservation Detail</h1>
+    <img src="/uploads/<%= reservationSingleData.Room.roomImage %>" alt="Room Image">
+    <h2><%= reservationSingleData.Room.roomName %></h2>
+    <p>Capacity: <%= reservationSingleData.Room.roomCapacity %></p>
+    <p>Type: <%= reservationSingleData.Room.roomType %></p>
+    <p>Price per day: $<span id="roomPrice"><%= reservationSingleData.Room.roomPrice %></span></p>
+    <p><%= reservationSingleData.checkInDate %></p>
+    <p><%= reservationSingleData.checkOutDate %></p>
+    <p><%= reservationSingleData.totalPrice %></p>
+    <p><%= reservationSingleData.status %></p>
+    
+    <% if (reservationSingleData.status === 'pending'){ %>
+    <form action="/continueToPayment/<%= reservationSingleData.id %>" method="get">
+        <button type="submit">continue To Payment</button>
+    </form>
+    <% } %>
+</body>
+</html>

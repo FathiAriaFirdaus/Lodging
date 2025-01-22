@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <div>
+        <% if (reservationData.length > 0) { %>
+          <% reservationData.forEach(reservation => { %>
+            <div>
+            <a href="/detailReservation/<%= reservation.Room.id %>">
+              <img src="/uploads/<%= reservation.Room.roomImage %>" alt="Room Image" style="width: 200px;height: auto;">
+              <p><%= reservation.User.name %></p>
+              <p><%= reservation.Room.roomName %></p>
+              <p><%= reservation.checkInDate %>$</p>
+              <p><%= reservation.status %></p>
+            </a>
+            </div>
+
+            <form action="/validateCheckIn/<%= reservation.id %>" method="post">
+                <input type="hidden" name="roomId" id="hiddenRoomId" value=<%= reservation.Room.id %>>
+                <button type="submit">Validate</button>
+            </form>
+          <% }); %>
+        <% } else { %>
+          <p>No room available currently</p>
+        <% } %>
+    </div>
+    
+</body>
+</html>
