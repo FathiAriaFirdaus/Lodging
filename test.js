@@ -1,4 +1,5 @@
 import User from "./models/User.js";
+import Service from "./models/Service.js";
 import sequelize from "./db.js";
 import bcrypt from "bcrypt";
 // import sync from './sync.js';
@@ -8,14 +9,13 @@ async function runTest() {
     // console.log('database synced')
 
     // INSERT DATA
-    const userData = {
-        name: "rina",
-        email: "rina@gmail.com",
-        password: await bcrypt.hash("1111", 10),
-        level: "receptionist",
+    const Data = {
+        serviceName: "Buffet",
+        servicePrice: 5,
+        serviceDescription: "Access buffet center",
     };
 
-    const user = await User.create(userData);
+    const user = await Service.create(Data);
 
     // SELECT DATA WHERE
     // const users = await User.findAll(

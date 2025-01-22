@@ -1,10 +1,14 @@
 import Payment from "../models/Payment.js";
 import Reservation from "../models/Reservation.js";
+import Room from "../models/Room.js";
 
 const pay = async (req, res) => {
     const reservationId = req.params.reservationId;
     const amountPaid = req.body.amountPaid;
     const paymentMethod = req.body.paymentMethod;
+    const roomId = req.body.roomId;
+
+    console.log(req.body);
 
     try{
         const payment = await Payment.create({
@@ -14,13 +18,24 @@ const pay = async (req, res) => {
         })
 
         const reservation = await Reservation.update(
-            {status: 'confirmed'},
+            {status: req.user && req.user.level === 'receptionist' ? 'check-in' : 'confirmed',},
             {where: {id: reservationId}}
-        )
+        );
 
-        res.redirect('/reservation');
+        if (req.user.level === 'receptionist') {
+            await Room.update(
+                { roomAvailable: false },
+                { where: { id: roomId } }
+            );
+            res.redirect('/homeReceptionist');
+        } else {
+            res.redirect('/reservation');
+        }
+        
     }
-    catch(err){}
+    catch(err){
+        res.status(500);
+    }
 }
 
 export default {pay};

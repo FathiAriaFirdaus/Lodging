@@ -33,7 +33,7 @@
 </head>
 <body>
     <h1>Payment</h1>
-    <p>Name: <%= reservationSingleData.User.name %></p>
+    <p>Name: <%= reservationSingleData.User ? reservationSingleData.User.name : "Guest" %></p>
     <p>Room: <%= reservationSingleData.Room.roomName %></p>
     <p id="totalPrice" data-value="<%= reservationSingleData.totalPrice %>">
         Total Price: <%= reservationSingleData.totalPrice %>
@@ -54,6 +54,8 @@
             Credit Card (Disabled)
         </label>
         <br>
+
+        <input type="hidden" name="roomId" value="<%= reservationSingleData.Room.id %>">
 
         <button type="submit">Pay</button>
     </form>

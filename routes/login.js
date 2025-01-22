@@ -43,7 +43,6 @@ router.post('/login', (req, res, next) => {
     })(req, res, next);
 });
 
-
 router.get('/secret', ensureAuthenticate, checkUserLevel('user'), loginController.secret);
 router.post('/register', loginController.registerUser);
 

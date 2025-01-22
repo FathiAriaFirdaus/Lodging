@@ -4,41 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Room Detail</title>
+
     <script>
-        function calculatePrice() {
-            const checkInInput = document.getElementById("checkInDate");
-            const checkOutInput = document.getElementById("checkOutDate");
-            const roomPriceInput = document.getElementById("roomPrice");
+    function calculatePrice() {
+        const checkInInput = document.getElementById("checkInDate");
+        const checkOutInput = document.getElementById("checkOutDate");
+        const roomPriceInput = document.getElementById("roomPrice");
+        const selectedServices = document.querySelectorAll('input[name="services[]"]:checked');
 
-            // Ensure the inputs have values
-            if (!checkInInput.value || !checkOutInput.value || !roomPriceInput.textContent) {
-                document.getElementById("totalPrice").textContent = "Please select valid dates";
-                document.getElementById("totalPriceInput").value = "";
-                return;
-            }
-
-            const checkInDate = new Date(checkInInput.value);
-            const checkOutDate = new Date(checkOutInput.value);
-            const roomPrice = parseInt(roomPriceInput.textContent);
-
-            if (checkInDate && checkOutDate && !isNaN(roomPrice)) {
-                const timeDiff = checkOutDate - checkInDate;
-                const dayDiff = timeDiff / (1000 * 60 * 60 * 24);
-
-                if (dayDiff > 0) {
-                    const totalPrice = dayDiff * roomPrice;
-                    document.getElementById("totalPrice").textContent = `Total price: $${totalPrice}`;
-                    document.getElementById("totalPriceInput").value = totalPrice;
-                } else {
-                    document.getElementById("totalPrice").textContent = "Invalid date selected";
-                    document.getElementById("totalPriceInput").value = "";
-                }
-            } else {
-                document.getElementById("totalPrice").textContent = "Please select valid dates";
-                document.getElementById("totalPriceInput").value = "";
-            }
+        if (!checkInInput.value || !checkOutInput.value || !roomPriceInput.textContent) {
+            document.getElementById("totalPrice").textContent = "Please select valid dates and services";
+            document.getElementById("totalPriceInput").value = "";
+            return;
         }
+
+        const checkInDate = new Date(checkInInput.value);
+        const checkOutDate = new Date(checkOutInput.value);
+        const roomPrice = parseInt(roomPriceInput.textContent);
+
+        if (checkInDate && checkOutDate && !isNaN(roomPrice)) {
+            const timeDiff = checkOutDate - checkInDate;
+            const dayDiff = timeDiff / (1000 * 60 * 60 * 24);
+
+            let totalServicePrice = 0;
+            selectedServices.forEach(service => {
+                totalServicePrice += parseInt(service.dataset.price);
+            });
+
+            if (dayDiff > 0) {
+                const totalPrice = dayDiff * roomPrice + totalServicePrice;
+                document.getElementById("totalPrice").textContent = `Total price: $${totalPrice}`;
+                document.getElementById("totalPriceInput").value = totalPrice;
+            } else {
+                document.getElementById("totalPrice").textContent = "Check-out date must be after check-in date";
+                document.getElementById("totalPriceInput").value = "";
+            }
+        } else {
+            document.getElementById("totalPrice").textContent = "Please select valid dates and services";
+            document.getElementById("totalPriceInput").value = "";
+        }
+    }
+
+    function updateServices() {
+        const selectedServices = document.querySelectorAll('input[name="services[]"]:checked');
+        const servicesInput = document.getElementById('selectedServicesInput');
+
+        // Collect all selected service IDs
+        const serviceIds = Array.from(selectedServices).map(service => service.value);
+        servicesInput.value = serviceIds.join(',');
+    }
     </script>
+    
 </head>
 <body>
     <h1>Room Detail</h1>
@@ -56,6 +72,22 @@
         
         <label for="checkOutDate">Check Out:</label>
         <input type="date" name="checkOutDate" id="checkOutDate" oninput="calculatePrice()">
+
+        <p>Additional Services:</p>
+        <% service.forEach(serv => { %>
+            <label>
+                <input 
+                    type="checkbox" 
+                    name="services[]" 
+                    value="<%= serv.id %>" 
+                    data-price="<%= serv.servicePrice %>" 
+                    onchange="calculatePrice(); updateServices();"
+                >
+                <%= serv.serviceName %> ($<%= serv.servicePrice %>)
+            </label>
+            <br>
+        <% }); %>
+  
     </form>
 
     <p id="totalPrice">Total price:</p>
@@ -66,10 +98,12 @@
         <input type="hidden" name="checkOutDate" id="hiddenCheckOutDate">
         <input type="hidden" name="totalPrice" id="totalPriceInput">
         <input type="hidden" name="roomPrice" value="<%= roomSingleData.roomPrice %>">
+        <input type="hidden" name="services" id="selectedServicesInput"> <!-- Hidden field for services -->
 
         <button type="submit" onclick="
             document.getElementById('hiddenCheckInDate').value = document.getElementById('checkInDate').value;
             document.getElementById('hiddenCheckOutDate').value = document.getElementById('checkOutDate').value;
+            updateServices();
         ">Reserve this room</button>
     </form>
 </body>

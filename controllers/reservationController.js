@@ -1,5 +1,7 @@
 import { Sequelize } from "sequelize";
 import Reservation from "../models/Reservation.js";
+import ReservationService from "../models/ReservationService.js";
+import Service from "../models/Service.js";
 import Room from "../models/Room.js";
 import { User } from "../relation.js";
 import models from "../models/index.js";
@@ -26,7 +28,7 @@ const reservationView = async(req, res) => {
         });
         
         console.log('reservationView ENDPOINT 4 HIT')
-        console.log(reservationData);
+        // console.log(reservationData);
         res.render("reservation.ejs", {reservationData: reservationData});
     }
     catch(err) {
@@ -39,10 +41,15 @@ const reservationDetailView = async(req, res) => {
 
     try{
         const reservationSingleData = await Reservation.findByPk(reservationId, {
-            include: {
+            include: [{
                 model: Room,
                 attributes: ['id', 'roomName', 'roomType', 'roomPrice', 'roomImage']
             },
+            {
+                model: Service,
+                attributes: ['id', 'serviceName', 'servicePrice'],
+                through: []
+            }]
         })
 
         res.render("detailReservation.ejs", {reservationSingleData: reservationSingleData});
@@ -53,9 +60,11 @@ const reservationDetailView = async(req, res) => {
 }
 
 const addReservation = async(req, res) => {
-    const {checkInDate, checkOutDate, totalPrice} = req.body;
+    const {checkInDate, checkOutDate, totalPrice, services} = req.body;
     const roomId = req.params.roomId;
-    const userId = req.user.id;
+    const servicesArray = services ? services.split(',').map(serviceId => parseInt(serviceId, 10)) : [];
+    console.log(req.body);
+    console.log(servicesArray);
 
     try{
         const room = await Room.findByPk(roomId)
@@ -63,19 +72,53 @@ const addReservation = async(req, res) => {
             res.status(404);
         }
 
+        console.log("SUCCESS BEFORE CREATE")
         const reservation = await Reservation.create({
-            userId,
+            userId: req.user && req.user.level === 'user' ? req.user.id : null,
             roomId,
             checkInDate,
             checkOutDate,
             totalPrice,
         })
+        console.log("SUCCESS AFTER CREATE")
 
-        res.redirect('/reservation');
+        if (servicesArray.length > 0) {
+            console.log("SERVICE ARRAY HIT");
+        
+            // Gunakan for loop untuk iterasi servicesArray
+            for (let i = 0; i < servicesArray.length; i++) {
+                const serviceId = servicesArray[i];
+        
+                // Pastikan serviceId valid
+                if (serviceId) {
+                    try {
+                        // Membuat record untuk tiap service menggunakan create
+                        await ReservationService.create({
+                            reservationId: reservation.id,
+                            serviceId: parseInt(serviceId, 10), // Pastikan serviceId adalah integer
+                        });
 
+                        console.log("QUERY SUCCESS")
+                    } catch (error) {
+                        console.error(`Error inserting service ${serviceId} into ReservationService:`, error);
+                        // Jika ingin berhenti di error pertama, bisa menggunakan return atau continue
+                        // res.status(500).send("Error occurred while adding service");
+                        continue; // Lanjutkan ke service berikutnya meskipun ada error
+                    }
+                } else {
+                    console.log(`Skipping invalid serviceId at index ${i}: ${serviceId}`);
+                }
+            }
+        }
+
+        if(req.user.level === 'receptionist') {
+            res.redirect(`/continueToPayment/${reservation.id}`)
+        } else {
+            res.redirect('/reservation');
+        }
     }
     catch(err){
-        res.status(500).sent("An error occured")
+        res.status(500).send("An error occured")
     }
 }
 
@@ -86,7 +129,7 @@ const reservationPaymentView = async(req, res) => {
         const reservationSingleData = await Reservation.findByPk(reservationId, {
             include: [{
                 model: Room,
-                attributes: ['roomName']
+                attributes: ['id', 'roomName']
             },
             {
                 model: User,
@@ -105,7 +148,13 @@ const deleteReservation = async (req, res) => {
     const reservationId = req.params.id;
 
     try{
-        const reservation = await Reservation.destroy({
+        const reservationService = await ReservationService.destroy({
+            where: {
+                reservationId: reservationId
+            }
+        })
+
+        const deleteReservation = await Reservation.destroy({
             where: {
                 id: reservationId
             }

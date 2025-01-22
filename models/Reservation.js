@@ -10,11 +10,11 @@ const Reservation = sequelize.define('Reservation', {
     },
     roomId: {
         type: DataTypes.INTEGER,
-        allowNull: true,
+        allowNull: false,
     },
     userId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
     },
     checkInDate: {
         type: DataTypes.DATE,

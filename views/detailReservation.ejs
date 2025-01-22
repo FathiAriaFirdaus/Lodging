@@ -14,8 +14,20 @@
     <p>Price per day: $<span id="roomPrice"><%= reservationSingleData.Room.roomPrice %></span></p>
     <p><%= reservationSingleData.checkInDate %></p>
     <p><%= reservationSingleData.checkOutDate %></p>
-    <p><%= reservationSingleData.totalPrice %></p>
     <p><%= reservationSingleData.status %></p>
+
+    <br>
+    <hr>
+    <h3>Selected Services:</h3>
+        <ul>
+        <% reservationSingleData.Services.forEach(service => { %>
+            <li><%= service.serviceName %> - $<%= service.servicePrice %></li>
+        <% }) %>
+        </ul>
+    <p><%= reservationSingleData.Room.roomPrice %></p>
+    <h3>Total Price:</h3>
+    <p><%= reservationSingleData.totalPrice %></p>
+    
     
     <% if (reservationSingleData.status === 'pending'){ %>
     <form action="/continueToPayment/<%= reservationSingleData.id %>" method="get">

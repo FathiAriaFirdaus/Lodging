@@ -1,4 +1,5 @@
 import Room from "../models/Room.js";
+import Service from "../models/Service.js";
 import { Op } from "sequelize";
 
 const addRoomView = async (req, res) => {
@@ -57,11 +58,18 @@ const filterRoom = async (req, res) => {
         if (roomCapacity) filters.roomCapacity = roomCapacity;
         if (roomType) filters.roomType = roomType;
 
+        filters.roomAvailable = true;
+
         const roomData = await Room.findAll({
             where: filters
         });
 
-        res.render('homeLogin.ejs', {roomData: roomData});
+        if (req.user.level === 'receptionist'){
+            res.render('homeLoginReceptionist.ejs', {roomData: roomData});
+        } else {
+            res.render('homeLogin.ejs', {roomData: roomData});
+        }
+        
     }
     catch (err) {
         res.status(500).send('An error occured');
@@ -76,8 +84,12 @@ const roomDetailView = async (req, res) => {
         const roomSingleData = await Room.findByPk(roomId);
         console.log(roomSingleData);
 
+        const service = await Service.findAll()
+
         if (roomSingleData) {
-            res.render("detailRoom.ejs", {roomSingleData: roomSingleData})
+            res.render("detailRoom.ejs", {
+                roomSingleData: roomSingleData,
+                service: service})
         } else {
             res.status(404).send('Thing you are looking for doenst exist')
         }
