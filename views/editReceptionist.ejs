@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Edit Receptionist</h1>
+    <hr>
+    
+    <form action="/editReceptionist/<%= userSingleData.id %>" method="post">
+        <label for="name">User Name:</label>
+        <input type="text" name="name" id="name" placeholder="<%= userSingleData.name %>" required>
+        <br>
+
+        <label for="email">User Email:</label>
+        <input type="text" name="email" id="email" placeholder="<%= userSingleData.email %>" disabled>
+        <br>
+
+        <label for="level">User Level</label>
+        <input name="level" id="level" placeholder="<%= userSingleData.level %>" disabled>
+        <br><br>
+
+        <button type="submit">Confirm</button>
+    </form>
+</body>
+</html>

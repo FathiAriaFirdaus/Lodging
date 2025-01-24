@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Edit Room</h1>
+    <hr>
+    
+    <form action="/editRoom/<%= roomSingleData.id %>" method="post">
+        <label for="roomName">Room Name:</label>
+        <input type="text" name="roomName" id="roomName" placeholder="<%= roomSingleData.roomName %>" required>
+        <br>
+
+        <label for="roomPrice">Room Price:</label>
+        <input type="number" name="roomPrice" id="roomPrice" placeholder="<%= roomSingleData.roomPrice %>" required>
+        <br>
+
+        <label for="roomDescription">Room Description</label>
+        <textarea name="roomDescription" id="roomDescription" rows="4" placeholder="<%= roomSingleData.roomDescription %>" required></textarea>
+        <br><br>
+
+        <label for="roomType">Room Type</label>
+        <select name="roomType" id="roomType" required>
+            <option value="single">Single</option>
+            <option value="double">Double</option>
+            <option value="suite">Suite</option>
+        </select>
+        <br><br>
+
+        <label for="roomCapacity">Room Capacity</label>
+        <select name="roomCapacity" id="roomCapacity">
+            <option value=1>one</option>
+            <option value=2>two</option>
+            <option value=4>four</option>
+        </select>
+        <br><br>
+
+        <button type="submit">Confirm</button>
+    </form>
+</body>
+</html>

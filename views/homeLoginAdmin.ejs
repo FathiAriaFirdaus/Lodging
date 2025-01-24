@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <nav>
+    <ul>
+      <li><a href="/homeAdmin">Home</a></li>
+      <li><a href="/logout">Logout</a></li>
+      <li><a href="/manageRoom">Manage Room</a></li>
+      <li><a href="/manageReceptionist">Manage Receptionist</a></li>
+      <li>About</li>
+    </ul>
+  </nav>
+
+  <h1>Trinity Lodge</h1>
+
+  <!-- Simpan data di data-* attributes -->
+  <div id="chartData" data-report="<%= JSON.stringify(reportData) %>"></div>
+
+  <!-- Grafik Total Reservasi -->
+  <canvas id="reservationChart" width="400" height="200"></canvas>
+
+  <!-- Grafik Total Pemasukan -->
+  <canvas id="incomeChart" width="400" height="200"></canvas>
+
+  <script>
+    // Ambil data dari elemen dengan id "chartData"
+    const chartDataElement = document.getElementById("chartData");
+    const reportData = JSON.parse(chartDataElement.getAttribute("data-report"));
+
+    console.log("Data for Graph:", reportData);  // Debugging data yang diterima
+
+    // Data untuk Grafik
+    const labels = reportData.map(data => `${data.month}/${data.year}`);
+    const reservations = reportData.map(data => parseInt(data.totalReservations));
+    const income = reportData.map(data => parseInt(data.totalIncome));
+
+    // Grafik Reservasi
+    const ctxReservations = document.getElementById("reservationChart").getContext("2d");
+    new Chart(ctxReservations, {
+      type: "bar",
+      data: {
+        labels,
+        datasets: [{
+          label: "Total Reservations",
+          data: reservations,
+          backgroundColor: "rgba(75, 192, 192, 0.2)",
+          borderColor: "rgba(75, 192, 192, 1)",
+          borderWidth: 1,
+        }],
+      },
+    });
+
+    // Grafik Pemasukan
+    const ctxIncome = document.getElementById("incomeChart").getContext("2d");
+    new Chart(ctxIncome, {
+      type: "line",
+      data: {
+        labels,
+        datasets: [{
+          label: "Total Income",
+          data: income,
+          backgroundColor: "rgba(255, 99, 132, 0.2)",
+          borderColor: "rgba(255, 99, 132, 1)",
+          borderWidth: 1,
+        }],
+      },
+    });
+  </script>
+
+</body>
+</html>

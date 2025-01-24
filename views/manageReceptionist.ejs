@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <nav>
+        <ul>
+          <li><a href="/homeAdmin">Home</a></li>
+          <li><a href="/logout">logout</a></li>
+          <li><a href="/manageRoom">Manage Room</a></li>
+          <li><a href="/manageReceptionist">Manage Receptionist</a></li>
+          <li>about</li>
+          <!-- <li><a href="/manageReceptionist">Manage Receptionist</a></li> -->
+        </ul>
+    </nav>
+
+    <h1>Manage Receptionist</h1>
+    <hr>
+
+    <form action="/addReceptionist" method="get">
+        <button type="submit">Add Receptionist</button>
+    </form>
+
+    <div>
+        <% if (userData.length > 0) { %>
+          <% userData.forEach(user => { %>
+            <div>
+              <p><%= user.name %></p>
+              <p><%= user.email %></p>
+              <p><%= user.level %></p>
+
+            <form action="/editReceptionist/<%= user.id %>" method="get">
+                <button type="submit">Edit Account</button>
+            </form>
+            <form action="/deleteReceptionist/<%= user.id %>" method="post">
+                <input type="hidden" name="_method" value="DELETE">
+                <button type="submit">Delete Account</button>
+            </form>
+    </div>
+    <% }); %>
+    <% } else { %>
+    <p>No room available currently</p>
+    <% } %>
+    </div>
+
+</body>
+</html>

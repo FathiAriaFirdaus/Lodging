@@ -27,7 +27,7 @@ const addRoom = async (req, res) => {
         })
 
         res.status(201)
-        res.redirect('/')
+        res.redirect('/manageRoom');
     }
     catch (err) {
         console.error(err);
@@ -35,9 +35,65 @@ const addRoom = async (req, res) => {
     }
 }
 
-const editRoomView = async (req, res) => {}
-const editRoom = async (req, res) => {}
-const deleteRoom = async (req, res) => {}
+const manageRoomView = async (req, res) => {
+    try{
+        const room = await Room.findAll()    
+        res.render("manageRoom.ejs", {roomData: room});
+    }
+    catch (err) {
+        res.status(500)
+    }
+}
+
+const editRoomView = async (req, res) => {
+    const roomId = req.params.id;
+    console.log("ROOM EDIT VIEW: ENDPOINT HIT")
+
+    try{
+        const room = await Room.findByPk(roomId); 
+        res.render("editRoom.ejs", {roomSingleData: room});
+    }
+    catch (err) {
+        res.status(500)
+    }
+}
+
+const editRoom = async (req, res) => {
+    const roomId = req.params.id;
+    const roomName = req.body.roomName;
+    const roomType = req.body.roomType;
+    const roomCapacity = req.body.roomCapacity;
+    const roomPrice = req.body.roomPrice;
+    const roomDescription = req.body.roomDescription;
+
+    try{
+        const room = await Room.update(
+            {roomName: roomName, roomType: roomType, roomCapacity: roomCapacity, roomPrice: roomPrice, roomDescription: roomDescription},
+            {where: {id : roomId}}
+        )
+
+        res.redirect("/manageRoom");
+    }
+    catch (err) {
+        res.status(500).send(err);
+    }
+}
+
+const deleteRoom = async (req, res) => {
+    console.log("DELETE ROOM: ENDPOINT HIT");
+    const roomId = req.params.id;
+
+    try{
+        const room = await Room.destroy({
+            where: {id: roomId}
+        })
+
+        res.redirect('/manageRoom');
+    }
+    catch (err) {
+        res.status(500).send(err);
+    }
+}
 
 const filterRoom = async (req, res) => {
     try{
@@ -104,4 +160,8 @@ export default {
     addRoomView, 
     filterRoom,
     roomDetailView,
+    manageRoomView,
+    editRoomView,
+    editRoom,
+    deleteRoom
 };

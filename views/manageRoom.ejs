@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <h2>Room Manager</h2>
+
+    <form action="/addRoom" method="get">
+        <button type="submit">Add Room</button>
+    </form>
+    <hr>
+  
+    <div>
+    <% if (roomData.length > 0) { %>
+      <% roomData.forEach(room => { %>
+        <div>
+          <img src="/uploads/<%= room.roomImage %>" alt="Room Image" style="width: 200px;height: auto;">
+          <p><%= room.roomName %></p>
+          <p><%= room.roomType %></p>
+          <p><%= room.roomPrice %>$</p>
+
+        <% if (room.roomAvailable === true) { %>
+        <form action="/editRoom/<%= room.id %>" method="get">
+            <button type="submit">Edit Room</button>
+        </form>
+        <form action="/deleteRoom/<%= room.id %>" method="post">
+            <input type="hidden" name="_method" value="DELETE">
+            <button type="submit">Delete Room</button>
+        </form>
+        <% } %>
+
+      </div>
+      <% }); %>
+    <% } else { %>
+      <p>No room available currently</p>
+    <% } %>
+    </div>
+  
+
+</body>
+</html>

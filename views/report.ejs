@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <table id="reportTable" class="display">
+        <thead>
+            <tr>
+                <th>Month</th>
+                <th>Year</th>
+                <th>Total Reservations</th>
+                <th>Total Income</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% reports.forEach(report => { %>
+                <tr>
+                    <td><%= new Date(2000, report.month - 1, 1).toLocaleString('en-US', { month: 'long' }) %></td>
+                    <td><%= report.year %></td>
+                    <td><%= report.totalReservations %></td>
+                    <td>$<%= report.totalIncome %></td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+    
+</body>
+</html>

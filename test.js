@@ -10,12 +10,13 @@ async function runTest() {
 
     // INSERT DATA
     const Data = {
-        serviceName: "Buffet",
-        servicePrice: 5,
-        serviceDescription: "Access buffet center",
+        name: "bear",
+        email: "bear@gmail.com",
+        password: await bcrypt.hash('1010', 10),
+        level: "admin"
     };
 
-    const user = await Service.create(Data);
+    const user = await User.create(Data);
 
     // SELECT DATA WHERE
     // const users = await User.findAll(
