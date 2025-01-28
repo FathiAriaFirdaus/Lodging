@@ -1,31 +1,241 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report</title>
+  <style>
+    /* Body */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh; /* Pastikan body memiliki tinggi minimal 100vh */
+    }
+
+    /* Navigation */
+    nav {
+      background-color: #ffffff;
+      padding: 15px 40px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+    }
+
+    nav ul li {
+      font-size: 16px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: #333;
+      padding: 8px 16px;
+      border-radius: 5px;
+    }
+
+    nav ul li a:hover {
+      background-color: #007BFF;
+      color: white;
+    }
+
+    /* Container */
+    .container {
+      background: #fff;
+      padding: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      max-width: 95%; /* Lebar container lebih besar */
+      margin: 30px auto;
+      flex-grow: 1; /* Pastikan container mengambil ruang yang tersisa */
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 2rem;
+    }
+
+    /* Tabel */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+      font-size: 1rem;
+      border-radius: 10px; /* Radius pada keempat sudut tabel */
+      overflow: hidden; /* Supaya radius tampil dengan baik */
+    }
+
+    table th, table td {
+      border: 1px solid #ddd;
+      padding: 12px 15px;
+      text-align: center;
+    }
+
+    table th {
+      background-color: #007BFF;
+      color: white;
+      font-size: 1.1rem;
+    }
+
+    table tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    table tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    /* Button */
+    button {
+      background-color: #007BFF;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Footer Styling */
+    footer {
+      background-color: #1d1d1d;
+      color: #ffffff;
+      padding: 40px 0;
+      margin-top: auto; /* Menjaga footer tetap di bawah */
+    }
+
+    .footer-container {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 40px;
+      margin-bottom: 30px;
+      padding-left: 70px;
+      padding-right: 70px;
+    }
+
+    .footer-container div {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .footer-container div h4 {
+      margin-bottom: 10px;
+      font-size: 1.2rem;
+    }
+
+    .footer-container div p {
+      font-size: 0.9rem;
+      color: #d8d8d8;
+      margin: 5px 0;
+    }
+
+    .social-links a {
+      margin: 0 10px;
+      color: #ffffff;
+      text-decoration: none;
+    }
+
+    .social-links a:hover {
+      color: #007BFF;
+    }
+
+    .footer-bottom {
+      font-size: 0.8rem;
+      color: #d8d8d8;
+      margin-top: 20px;
+      padding-left: 70px;
+    }
+  </style>
 </head>
 <body>
-    <table id="reportTable" class="display">
-        <thead>
-            <tr>
-                <th>Month</th>
-                <th>Year</th>
-                <th>Total Reservations</th>
-                <th>Total Income</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% reports.forEach(report => { %>
-                <tr>
-                    <td><%= new Date(2000, report.month - 1, 1).toLocaleString('en-US', { month: 'long' }) %></td>
-                    <td><%= report.year %></td>
-                    <td><%= report.totalReservations %></td>
-                    <td>$<%= report.totalIncome %></td>
-                </tr>
-            <% }); %>
-        </tbody>
+  <!-- Navigation -->
+  <nav>
+    <ul>
+      <li><a href="/homeAdmin">Home</a></li>
+      <li><a href="/manageRoom">Manage Room</a></li>
+      <li><a href="/manageReceptionist">Manage Receptionist</a></li>
+      <li><a href="/report">Report</a></li>
+      <li><a href="/logout">Logout</a></li>
+    </ul>
+  </nav>
+
+  <!-- Container -->
+  <div class="container">
+    <h1>Monthly Report</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Month</th>
+          <th>Year</th>
+          <th>Total Reservations</th>
+          <th>Total Income</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% reportData.forEach((data) => { %>
+          <tr>
+            <td><%= data.month %></td>
+            <td><%= data.year %></td>
+            <td><%= data.totalReservations %></td>
+            <td><%= data.totalIncome %></td>
+          </tr>
+        <% }); %>
+      </tbody>
     </table>
-    
+    <form action="/reportDownload" method="POST">
+      <button type="submit">Download PDF</button>
+    </form>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <div>
+        <h4>Company</h4>
+        <p>About Us</p>
+        <p>Careers</p>
+        <p>Privacy Policy</p>
+        <p>Terms of Service</p>
+      </div>
+      <div>
+        <h4>Services</h4>
+        <p>Customer Support</p>
+        <p>FAQ</p>
+        <p>Room Booking</p>
+        <p>Contact Us</p>
+      </div>
+      <div>
+        <h4>Follow Us</h4>
+        <div class="social-links">
+          <a href="#">Facebook</a>
+          <a href="#">Twitter</a>
+          <a href="#">Instagram</a>
+        </div>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <p>Email: support@redwoodhotel.com</p>
+        <p>Phone: +1 234 567 890</p>
+        <p>Address: 123 Redwood St, City, Country</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Redwood Hotel. All Rights Reserved.</p>
+    </div>
+  </footer>
 </body>
 </html>

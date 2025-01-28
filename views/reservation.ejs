@@ -3,32 +3,278 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Reservation Manager</title>
+    <style>
+        /* Body */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('images/bg.jpg');
+            background-size: cover; /* atau coba cover */
+            background-repeat: no-repeat;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #ffffff;
+            padding: 15px 40px;
+            margin-bottom: 0;
+            border-radius: 0;
+            border-bottom: #d8d8d8 solid 0.3px;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        nav ul li {
+            font-size: 16px;
+        }
+
+        nav ul li a {
+            color: rgb(0, 0, 0);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+        }
+
+        nav ul li a:hover {
+            background-color: #007BFF;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 950px;
+            margin: 30px auto;
+            padding: 20px;
+            padding-bottom: 30px;
+            background-color: rgb(243, 243, 243);
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .reservation-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .reservation-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            width: 23%;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 0;
+            text-align: left;
+        }
+
+        .reservation-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .reservation-card a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .reservation-card p {
+            margin: 10px 15px;
+            color: #555;
+        }
+
+        .reservation-card .room-name {
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .reservation-card .room-price {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #007BFF;
+        }
+
+        .reservation-card form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .reservation-card button {
+            width: 80%; /* Membuat tombol melebar */
+            padding: 10px 0;
+            background-color: #FF4C4C; /* Warna merah untuk tombol delete */
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            margin-top: 10px;
+        }
+
+        .reservation-card button:hover {
+            background-color: #CC0000; /* Warna lebih gelap saat hover */
+        }
+
+        .no-reservation {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #888;
+        }
+
+        /* Footer Styling */
+        footer {
+            background-color: #1d1d1d;
+            color: #ffffff;
+            padding: 40px 0;
+            text-align: left;
+            margin-top: 50px;
+        }
+
+        .footer-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-bottom: 30px;
+            padding-left: 70px;
+            padding-right: 70px;
+        }
+
+        .footer-container div {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .footer-container div h4 {
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .footer-container div p {
+            font-size: 0.9rem;
+            color: #d8d8d8;
+            margin: 5px 0;
+        }
+
+        .social-links a {
+            margin: 0 10px;
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            color: #007BFF;
+        }
+
+        .footer-bottom {
+            font-size: 0.8rem;
+            color: #d8d8d8;
+            margin-top: 20px;
+            padding-left: 70px;
+        }
+    </style>
 </head>
 <body>
-    <div>
-        <% if (reservationData.length > 0) { %>
-          <% reservationData.forEach(reservation => { %>
-            <div>
+
+  <nav>
+    <ul>
+      <li><a href="/home">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="/logout">Logout</a></li>
+      <li><a href="/reservation">Reservation</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <h2>Your Reservations</h2>
+
+    <div class="reservation-container">
+      <% if (reservationData.length > 0) { %>
+        <% reservationData.forEach(reservation => { %>
+          <div class="reservation-card">
             <a href="/detailReservation/<%= reservation.id %>">
-              <img src="/uploads/<%= reservation.Room.roomImage %>" alt="Room Image" style="width: 200px;height: auto;">
-              <p><%= reservation.Room.roomName %></p>
-              <p><%= reservation.Room.roomType %></p>
-              <p><%= reservation.totalPrice %></p>
-              <p><%= reservation.status %></p>
+              <img src="/uploads/<%= reservation.Room.roomImage %>" alt="Room Image">
+              <p><strong><%= reservation.Room.roomName %></strong></p>
+              <p>Type: <%= reservation.Room.roomType %></p>
+              <p>Price: <%= reservation.totalPrice %></p>
+              <p>Status: <%= reservation.status %></p>
             </a>
-            
+
             <% if (reservation.status === "pending"){ %>
               <form action="/deleteReservation/<%= reservation.id %>" method="POST">
                 <input type="hidden" name="_method" value="DELETE">
                 <button type="submit">Delete</button>
               </form>
-            <%  }%>
+            <% } %>
           </div>
-          <% }); %>
-        <% } else { %>
-          <p>There are no reservation Currently</p>
-        <% } %>
+        <% }); %>
+      <% } else { %>
+        <div class="no-reservation">
+          <p>No reservation available currently</p>
         </div>
+      <% } %>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+        <div>
+            <h4>Company</h4>
+            <p>About Us</p>
+            <p>Careers</p>
+            <p>Privacy Policy</p>
+            <p>Terms of Service</p>
+        </div>
+        <div>
+            <h4>Services</h4>
+            <p>Customer Support</p>
+            <p>FAQ</p>
+            <p>Room Booking</p>
+            <p>Contact Us</p>
+        </div>
+        <div>
+            <h4>Follow Us</h4>
+            <div class="social-links">
+                <a href="#">Facebook</a>
+                <a href="#">Twitter</a>
+                <a href="#">Instagram</a>
+            </div>
+        </div>
+        <div>
+            <h4>Contact</h4>
+            <p>Email: support@redwoodhotel.com</p>
+            <p>Phone: +1 234 567 890</p>
+            <p>Address: 123 Redwood St, City, Country</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2025 Redwood Hotel. All Rights Reserved.</p>
+    </div>
+  </footer>
+
 </body>
 </html>

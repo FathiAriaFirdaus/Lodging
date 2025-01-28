@@ -6,6 +6,13 @@ import Reservation from "../models/Reservation.js";
 import Payment from "../models/Payment.js";
 import { fn, col, Op } from "sequelize";
 import sequelize from "../db.js";
+import PDFDocument from "pdfkit";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const home = async(req, res) => {
     const roomData = await Room.findAll(
@@ -214,6 +221,155 @@ const homeAdmin = async (req, res) => {
     }
 };
 
+const generateReport = async (req, res) => {
+    try {
+        // Ambil data laporan dari database
+        const reportData = await Reservation.findAll({
+            attributes: [
+                [sequelize.literal('EXTRACT(MONTH FROM "createdAt")'), "month"],
+                [sequelize.literal('EXTRACT(YEAR FROM "createdAt")'), "year"],
+                [sequelize.fn("COUNT", sequelize.col("id")), "totalReservations"],
+            ],
+            group: [
+                sequelize.literal('EXTRACT(YEAR FROM "createdAt")'),
+                sequelize.literal('EXTRACT(MONTH FROM "createdAt")'),
+            ],
+            order: [
+                [sequelize.literal('EXTRACT(YEAR FROM "createdAt")'), "DESC"],
+                [sequelize.literal('EXTRACT(MONTH FROM "createdAt")'), "DESC"],
+            ],
+        });
+
+        const incomeData = await Payment.findAll({
+            attributes: [
+                [sequelize.literal('EXTRACT(MONTH FROM "createdAt")'), "month"],
+                [sequelize.literal('EXTRACT(YEAR FROM "createdAt")'), "year"],
+                [sequelize.fn("SUM", sequelize.col("amountPaid")), "totalIncome"],
+            ],
+            group: [
+                sequelize.literal('EXTRACT(YEAR FROM "createdAt")'),
+                sequelize.literal('EXTRACT(MONTH FROM "createdAt")'),
+            ],
+            order: [
+                [sequelize.literal('EXTRACT(YEAR FROM "createdAt")'), "DESC"],
+                [sequelize.literal('EXTRACT(MONTH FROM "createdAt")'), "DESC"],
+            ],
+        });
+
+        // Gabungkan data laporan
+        const mergedData = reportData.map((report) => {
+            const income = incomeData.find(
+                (inc) =>
+                    inc.dataValues.month === report.dataValues.month &&
+                    inc.dataValues.year === report.dataValues.year
+            );
+            return {
+                month: report.dataValues.month,
+                year: report.dataValues.year,
+                totalReservations: report.dataValues.totalReservations,
+                totalIncome: income ? income.dataValues.totalIncome : 0,
+            };
+        });
+
+        // Kirim data ke template
+        res.render("report", { reportData: mergedData });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("An error occurred");
+    }
+};
+
+export const downloadReport = async (req, res) => {
+    try {
+      // Ambil data laporan dari database
+      const reportData = await Reservation.findAll({
+        attributes: [
+          [sequelize.literal('EXTRACT(MONTH FROM "createdAt")'), "month"],
+          [sequelize.literal('EXTRACT(YEAR FROM "createdAt")'), "year"],
+          [sequelize.fn("COUNT", sequelize.col("id")), "totalReservations"],
+        ],
+        group: [
+          sequelize.literal('EXTRACT(YEAR FROM "createdAt")'),
+          sequelize.literal('EXTRACT(MONTH FROM "createdAt")'),
+        ],
+        order: [
+          [sequelize.literal('EXTRACT(YEAR FROM "createdAt")'), "DESC"],
+          [sequelize.literal('EXTRACT(MONTH FROM "createdAt")'), "DESC"],
+        ],
+      });
+  
+      const incomeData = await Payment.findAll({
+        attributes: [
+          [sequelize.literal('EXTRACT(MONTH FROM "createdAt")'), "month"],
+          [sequelize.literal('EXTRACT(YEAR FROM "createdAt")'), "year"],
+          [sequelize.fn("SUM", sequelize.col("amountPaid")), "totalIncome"],
+        ],
+        group: [
+          sequelize.literal('EXTRACT(YEAR FROM "createdAt")'),
+          sequelize.literal('EXTRACT(MONTH FROM "createdAt")'),
+        ],
+        order: [
+          [sequelize.literal('EXTRACT(YEAR FROM "createdAt")'), "DESC"],
+          [sequelize.literal('EXTRACT(MONTH FROM "createdAt")'), "DESC"],
+        ],
+      });
+  
+      // Gabungkan data laporan
+      const mergedData = reportData.map((report) => {
+        const income = incomeData.find(
+          (inc) =>
+            inc.dataValues.month === report.dataValues.month &&
+            inc.dataValues.year === report.dataValues.year
+        );
+        return {
+          month: report.dataValues.month,
+          year: report.dataValues.year,
+          totalReservations: report.dataValues.totalReservations,
+          totalIncome: income ? income.dataValues.totalIncome : 0,
+        };
+      });
+  
+      // Buat dokumen PDF
+      const doc = new PDFDocument();
+      const filePath = path.join(__dirname, "../public/reports/report.pdf");
+  
+      // Simpan PDF ke file
+      const writeStream = fs.createWriteStream(filePath);
+      doc.pipe(writeStream);
+  
+      // Header dokumen
+      doc.fontSize(18).text("Monthly Report", { align: "center" }).moveDown();
+  
+      // Tabel laporan
+      doc.fontSize(12);
+      doc.text("Month | Year | Total Reservations | Total Income", { underline: true });
+      doc.moveDown(0.5);
+  
+      mergedData.forEach((data) => {
+        doc.text(
+          `${data.month} | ${data.year} | ${data.totalReservations} | $${data.totalIncome}`
+        );
+      });
+  
+      // Akhiri dokumen
+      doc.end();
+  
+      // Tunggu dokumen selesai dan kirim file
+      writeStream.on("finish", () => {
+        res.download(filePath, "report.pdf", (err) => {
+          if (err) {
+            console.error(err);
+            res.status(500).send("Failed to download report.");
+          } else {
+            console.log("PDF downloaded successfully!");
+          }
+        });
+      });
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("An error occurred while generating the PDF report.");
+    }
+  };
   
 
 export default {
@@ -232,5 +388,7 @@ export default {
     deleteReceptionist,
     addReceptionistView,
     addReceptionist,
+    generateReport,
+    downloadReport
 
 };

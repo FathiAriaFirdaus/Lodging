@@ -4,107 +4,368 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Room Detail</title>
-
-    <script>
-    function calculatePrice() {
-        const checkInInput = document.getElementById("checkInDate");
-        const checkOutInput = document.getElementById("checkOutDate");
-        const roomPriceInput = document.getElementById("roomPrice");
-        const selectedServices = document.querySelectorAll('input[name="services[]"]:checked');
-
-        if (!checkInInput.value || !checkOutInput.value || !roomPriceInput.textContent) {
-            document.getElementById("totalPrice").textContent = "Please select valid dates and services";
-            document.getElementById("totalPriceInput").value = "";
-            return;
+    <style>
+        /* Reset and general styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        const checkInDate = new Date(checkInInput.value);
-        const checkOutDate = new Date(checkOutInput.value);
-        const roomPrice = parseInt(roomPriceInput.textContent);
-
-        if (checkInDate && checkOutDate && !isNaN(roomPrice)) {
-            const timeDiff = checkOutDate - checkInDate;
-            const dayDiff = timeDiff / (1000 * 60 * 60 * 24);
-
-            let totalServicePrice = 0;
-            selectedServices.forEach(service => {
-                totalServicePrice += parseInt(service.dataset.price);
-            });
-
-            if (dayDiff > 0) {
-                const totalPrice = dayDiff * roomPrice + totalServicePrice;
-                document.getElementById("totalPrice").textContent = `Total price: $${totalPrice}`;
-                document.getElementById("totalPriceInput").value = totalPrice;
-            } else {
-                document.getElementById("totalPrice").textContent = "Check-out date must be after check-in date";
-                document.getElementById("totalPriceInput").value = "";
-            }
-        } else {
-            document.getElementById("totalPrice").textContent = "Please select valid dates and services";
-            document.getElementById("totalPriceInput").value = "";
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('/images/bgver.jpg');
+    background-size: cover; /* atau contain */
+    background-repeat: no-repeat;
+    background-position: center;
+            margin: 0;
+            padding: 0;
         }
-    }
 
-    function updateServices() {
-        const selectedServices = document.querySelectorAll('input[name="services[]"]:checked');
-        const servicesInput = document.getElementById('selectedServicesInput');
+        /* Navigation */
+        nav {
+            background-color: #ffffff;
+            padding: 15px 40px;
+            color: white;
+            margin-bottom: 0;
+            border-bottom: #d8d8d8 solid 0.3px;
+        }
 
-        // Collect all selected service IDs
-        const serviceIds = Array.from(selectedServices).map(service => service.value);
-        servicesInput.value = serviceIds.join(',');
-    }
-    </script>
-    
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        nav ul li {
+            font-size: 16px;
+        }
+
+        nav ul li a {
+            color: rgb(0, 0, 0);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+        }
+
+        nav ul li a:hover {
+            background-color: #007BFF;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 550px; 
+            margin: 30px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .room-detail {
+            margin-bottom: 20px;
+        }
+
+        .room-detail img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .room-detail h2 {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .room-detail p {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .room-detail .price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #007BFF;
+        }
+
+        /* Form Section */
+        .form-section {
+            margin-top: 30px;
+        }
+
+        .form-section label {
+            font-size: 1rem;
+            color: #333;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-section input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .services-section {
+            margin-top: 20px;
+        }
+
+        .services-section p {
+            font-size: 1rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .service-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .service-item span {
+            font-size: 1rem;
+            color: #555;
+        }
+
+        .service-item label {
+            display: inline-block;
+        }
+
+        /* Price and Total */
+        #totalPrice {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #007BFF;
+            margin-top: 20px;
+        }
+
+        /* Button */
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007BFF;
+            color: white;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #1d1d1d;
+            color: #ffffff;
+            padding: 40px 0;
+            text-align: left;
+            width: 100%;
+            position: relative;
+            bottom: 0;
+        }
+
+        .footer-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-bottom: 30px;
+            padding-left: 70px;
+            padding-right: 70px;
+        }
+
+        .footer-container div {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .footer-container div h4 {
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .footer-container div p {
+            font-size: 0.9rem;
+            color: #d8d8d8;
+            margin: 5px 0;
+        }
+
+        .social-links a {
+            margin: 0 10px;
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            color: #007BFF;
+        }
+
+        .footer-bottom {
+            font-size: 0.8rem;
+            color: #ffffff;
+            margin-top: 20px;
+            padding-left: 70px;
+        }
+
+        .footer-bottom > p {
+            color: white;
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
 <body>
-    <h1>Room Detail</h1>
-    <img src="/uploads/<%= roomSingleData.roomImage %>" alt="Room Image">
-    <h2><%= roomSingleData.roomName %></h2>
-    <p>Capacity: <%= roomSingleData.roomCapacity %></p>
-    <p>Type: <%= roomSingleData.roomType %></p>
-    <p>Price per day: $<span id="roomPrice"><%= roomSingleData.roomPrice %></span></p>
-    <p>Description: <%= roomSingleData.roomDescription %></p>
 
-    <!-- Form for date selection -->
-    <form>
-        <label for="checkInDate">Check In:</label>
-        <input type="date" name="checkInDate" id="checkInDate" oninput="calculatePrice()">
-        
-        <label for="checkOutDate">Check Out:</label>
-        <input type="date" name="checkOutDate" id="checkOutDate" oninput="calculatePrice()">
+    <nav>
+        <ul>
+            <li><a href="/home">Home</a></li>
+            <li><a href="">About</a></li>
+            <li><a href="/logout">Logout</a></li>
+            <li><a href="/reservation">Reservation</a></li>
+        </ul>
+    </nav>
 
-        <p>Additional Services:</p>
-        <% service.forEach(serv => { %>
-            <label>
-                <input 
-                    type="checkbox" 
-                    name="services[]" 
-                    value="<%= serv.id %>" 
-                    data-price="<%= serv.servicePrice %>" 
-                    onchange="calculatePrice(); updateServices();"
-                >
-                <%= serv.serviceName %> ($<%= serv.servicePrice %>)
-            </label>
-            <br>
-        <% }); %>
-  
-    </form>
+    <div class="container">
+        <h1>Room Detail</h1>
+        <div class="room-detail">
+            <img src="/uploads/<%= roomSingleData.roomImage %>" alt="Room Image">
+            <h2><%= roomSingleData.roomName %></h2>
+            <p>Capacity: <%= roomSingleData.roomCapacity %></p>
+            <p>Type: <%= roomSingleData.roomType %></p>
+            <p>Price per day: $<span id="roomPrice"><%= roomSingleData.roomPrice %></span></p>
+            <p>Description: <%= roomSingleData.roomDescription %></p>
+        </div>
 
-    <p id="totalPrice">Total price:</p>
+        <!-- Form for date selection -->
+        <div class="form-section">
+            <label for="checkInDate">Check In:</label>
+            <input type="date" name="checkInDate" id="checkInDate" oninput="calculatePrice()" required>
+            
+            <label for="checkOutDate">Check Out:</label>
+            <input type="date" name="checkOutDate" id="checkOutDate" oninput="calculatePrice()" required>
 
-    <!-- Reservation Form -->
-    <form action="/addReservation/<%= roomSingleData.id %>" method="post">
-        <input type="hidden" name="checkInDate" id="hiddenCheckInDate">
-        <input type="hidden" name="checkOutDate" id="hiddenCheckOutDate">
-        <input type="hidden" name="totalPrice" id="totalPriceInput">
-        <input type="hidden" name="roomPrice" value="<%= roomSingleData.roomPrice %>">
-        <input type="hidden" name="services" id="selectedServicesInput"> <!-- Hidden field for services -->
+            <div class="services-section">
+                <p>Additional Services:</p>
+                <% service.forEach(serv => { %>
+                    <div class="service-item">
+                        <span><%= serv.serviceName %> ($<%= serv.servicePrice %>)</span>
+                        <label>
+                            <input 
+                                type="checkbox" 
+                                name="services[]" 
+                                value="<%= serv.id %>" 
+                                data-price="<%= serv.servicePrice %>" 
+                                onchange="calculatePrice(); updateServices();"
+                            >
+                        </label>
+                    </div>
+                <% }); %>
+            </div>
+        </div>
 
-        <button type="submit" onclick="
-            document.getElementById('hiddenCheckInDate').value = document.getElementById('checkInDate').value;
-            document.getElementById('hiddenCheckOutDate').value = document.getElementById('checkOutDate').value;
-            updateServices();
-        ">Reserve this room</button>
-    </form>
+        <p id="totalPrice" class="total-price">Total price:</p>
+
+        <!-- Reservation Form -->
+        <form action="/addReservation/<%= roomSingleData.id %>" method="post">
+            <input type="hidden" name="checkInDate" id="hiddenCheckInDate">
+            <input type="hidden" name="checkOutDate" id="hiddenCheckOutDate">
+            <input type="hidden" name="totalPrice" id="totalPriceInput">
+            <input type="hidden" name="roomPrice" value="<%= roomSingleData.roomPrice %>">
+            <input type="hidden" name="services" id="selectedServicesInput">
+
+            <button type="submit" onclick="
+                document.getElementById('hiddenCheckInDate').value = document.getElementById('checkInDate').value;
+                document.getElementById('hiddenCheckOutDate').value = document.getElementById('checkOutDate').value;
+                updateServices();
+            ">Reserve this room</button>
+        </form>
+    </div>
+
+    <!-- Footer -->
+<footer>
+    <div class="footer-container">
+        <div>
+            <h4>Company</h4>
+            <p>About Us</p>
+            <p>Careers</p>
+            <p>Privacy Policy</p>
+            <p>Terms of Service</p>
+        </div>
+        <div>
+            <h4>Services</h4>
+            <p>Customer Support</p>
+            <p>FAQ</p>
+            <p>Room Booking</p>
+            <p>Contact Us</p>
+        </div>
+        <div>
+            <h4>Follow Us</h4>
+            <div class="social-links">
+                <a href="#">Facebook</a>
+                <a href="#">Twitter</a>
+                <a href="#">Instagram</a>
+            </div>
+        </div>
+        <div>
+            <h4>Contact</h4>
+            <p>Email: support@redwoodhotel.com</p>
+            <p>Phone: +1 234 567 890</p>
+            <p>Address: 123 Redwood St, City, Country</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2025 Redwood Hotel. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+    <script>
+        function calculatePrice() {
+            const checkInDate = document.getElementById("checkInDate").value;
+            const checkOutDate = document.getElementById("checkOutDate").value;
+            const roomPrice = parseFloat(document.getElementById("roomPrice").innerText);
+            let totalPrice = roomPrice;
+
+            if (checkInDate && checkOutDate) {
+                const checkIn = new Date(checkInDate);
+                const checkOut = new Date(checkOutDate);
+                const days = Math.ceil((checkOut - checkIn) / (1000 * 3600 * 24));
+                if (days > 0) {
+                    totalPrice *= days;
+                }
+            }
+
+            document.getElementById("totalPrice").innerText = `Total price: $${totalPrice.toFixed(2)}`;
+            document.getElementById("totalPriceInput").value = totalPrice;
+        }
+
+        function updateServices() {
+            const services = [];
+            const selectedServices = document.querySelectorAll('input[name="services[]"]:checked');
+            selectedServices.forEach(service => {
+                services.push(service.value);
+            });
+
+            document.getElementById("selectedServicesInput").value = services.join(",");
+        }
+    </script>
+
 </body>
 </html>

@@ -3,36 +3,274 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Reservation Detail</title>
+    <style>
+        /* Reset and general styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('/images/bgver.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #ffffff;
+            padding: 15px 40px;
+            margin-bottom: 0;
+            border-bottom: #d8d8d8 solid 0.3px;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        nav ul li {
+            font-size: 16px;
+        }
+
+        nav ul li a {
+            color: rgb(0, 0, 0);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+        }
+
+        nav ul li a:hover {
+            background-color: #007BFF;
+            color: #ffffff;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 550px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .details-container {
+            margin-bottom: 20px;
+        }
+
+        .details-container img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .details-container h2 {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .details-container p {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .details-container .price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #007BFF;
+        }
+
+        /* Services List */
+        .services-list h3 {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .services-list ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .services-list ul li {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        /* Button */
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007BFF;
+            color: white;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #1d1d1d;
+            color: #ffffff;
+            padding: 40px 0;
+            text-align: left;
+        }
+
+        .footer-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-bottom: 30px;
+            padding-left: 70px;
+            padding-right: 70px;
+        }
+
+        .footer-container div {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .footer-container div h4 {
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .footer-container div p {
+            font-size: 0.9rem;
+            color: #d8d8d8;
+            margin: 5px 0;
+        }
+
+        .social-links a {
+            margin: 0 10px;
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            color: #007BFF;
+        }
+
+        .footer-bottom {
+            font-size: 0.8rem;
+            color: #ffffff;
+            margin-top: 20px;
+            padding-left: 70px;
+        }
+
+        .footer-bottom > p {
+            color: white;
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
 <body>
-    <h1>Reservation Detail</h1>
-    <img src="/uploads/<%= reservationSingleData.Room.roomImage %>" alt="Room Image">
-    <h2><%= reservationSingleData.Room.roomName %></h2>
-    <p>Capacity: <%= reservationSingleData.Room.roomCapacity %></p>
-    <p>Type: <%= reservationSingleData.Room.roomType %></p>
-    <p>Price per day: $<span id="roomPrice"><%= reservationSingleData.Room.roomPrice %></span></p>
-    <p><%= reservationSingleData.checkInDate %></p>
-    <p><%= reservationSingleData.checkOutDate %></p>
-    <p><%= reservationSingleData.status %></p>
 
-    <br>
-    <hr>
-    <h3>Selected Services:</h3>
+    <nav>
         <ul>
-        <% reservationSingleData.Services.forEach(service => { %>
-            <li><%= service.serviceName %> - $<%= service.servicePrice %></li>
-        <% }) %>
+            <li><a href="/home">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="/logout">Logout</a></li>
+            <li><a href="/reservation">Reservation</a></li>
         </ul>
-    <p><%= reservationSingleData.Room.roomPrice %></p>
-    <h3>Total Price:</h3>
-    <p><%= reservationSingleData.totalPrice %></p>
-    
-    
-    <% if (reservationSingleData.status === 'pending'){ %>
-    <form action="/continueToPayment/<%= reservationSingleData.id %>" method="get">
-        <button type="submit">continue To Payment</button>
-    </form>
-    <% } %>
+    </nav>
+
+    <div class="container">
+        <h1>Reservation Detail</h1>
+        <div class="details-container">
+            <img src="/uploads/<%= reservationSingleData.Room.roomImage %>" alt="Room Image">
+            <h2><%= reservationSingleData.Room.roomName %></h2>
+            <p>Capacity: <%= reservationSingleData.Room.roomCapacity %></p>
+            <p>Type: <%= reservationSingleData.Room.roomType %></p>
+            <p>Price per day: $<%= reservationSingleData.Room.roomPrice %></p>
+            <p>Check-in Date: <%= reservationSingleData.checkInDate %></p>
+            <p>Check-out Date: <%= reservationSingleData.checkOutDate %></p>
+            <p>Status: <%= reservationSingleData.status %></p>
+        </div>
+
+        <div class="services-list">
+            <h3>Selected Services:</h3>
+            <ul>
+                <% reservationSingleData.Services.forEach(service => { %>
+                    <li><%= service.serviceName %> - $<%= service.servicePrice %></li>
+                <% }); %>
+            </ul>
+        </div>
+
+        <p class="price">Total Price: $<%= reservationSingleData.totalPrice %></p>
+
+        <% if (reservationSingleData.status === 'pending') { %>
+            <form action="/continueToPayment/<%= reservationSingleData.id %>" method="get">
+                <button type="submit">Continue to Payment</button>
+            </form>
+        <% } %>
+    </div>
+
+    <footer>
+        <div class="footer-container">
+            <div>
+                <h4>Company</h4>
+                <p>About Us</p>
+                <p>Careers</p>
+                <p>Privacy Policy</p>
+                <p>Terms of Service</p>
+            </div>
+            <div>
+                <h4>Services</h4>
+                <p>Customer Support</p>
+                <p>FAQ</p>
+                <p>Room Booking</p>
+                <p>Contact Us</p>
+            </div>
+            <div>
+                <h4>Follow Us</h4>
+                <div class="social-links">
+                    <a href="#">Facebook</a>
+                    <a href="#">Twitter</a>
+                    <a href="#">Instagram</a>
+                </div>
+            </div>
+            <div>
+                <h4>Contact</h4>
+                <p>Email: support@redwoodhotel.com</p>
+                <p>Phone: +1 234 567 890</p>
+                <p>Address: 123 Redwood St, City, Country</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Redwood Hotel. All Rights Reserved.</p>
+        </div>
+    </footer>
+
 </body>
 </html>

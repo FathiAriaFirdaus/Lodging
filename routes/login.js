@@ -58,4 +58,7 @@ router.post('/login', (req, res, next) => {
 router.get('/secret', ensureAuthenticate, checkUserLevel('user'), loginController.secret);
 router.post('/register', loginController.registerUser);
 
+router.post("/reportDownload", ensureAuthenticate, checkUserLevel('admin'), loginController.downloadReport);
+router.get("/report", ensureAuthenticate, checkUserLevel('admin'), loginController.generateReport);
+
 export default router;

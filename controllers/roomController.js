@@ -143,9 +143,16 @@ const roomDetailView = async (req, res) => {
         const service = await Service.findAll()
 
         if (roomSingleData) {
-            res.render("detailRoom.ejs", {
-                roomSingleData: roomSingleData,
-                service: service})
+            if (req.user.level === 'receptionist'){
+                res.render("detailRoomRec.ejs", {
+                    roomSingleData: roomSingleData,
+                    service: service})
+            } else if (req.user.level === 'user'){
+                res.render("detailRoom.ejs", {
+                    roomSingleData: roomSingleData,
+                    service: service})
+            }
+            
         } else {
             res.status(404).send('Thing you are looking for doenst exist')
         }

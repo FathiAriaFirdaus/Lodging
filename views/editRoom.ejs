@@ -3,42 +3,238 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Edit Room</title>
+    <style>
+        /* Body */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #ffffff;
+            padding: 15px 40px;
+            color: white;
+            margin-bottom: 0;
+            border-radius: 0;
+            border-bottom: #d8d8d8 solid 0.3px;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        nav ul li {
+            font-size: 16px;
+        }
+
+        nav ul li a {
+            color: rgb(0, 0, 0);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+        }
+
+        nav ul li a:hover {
+            background-color: #007BFF;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        input, select, textarea {
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Footer Styling */
+        footer {
+            background-color: #1d1d1d;
+            color: #ffffff;
+            padding: 40px 0;
+            text-align: left;
+        }
+
+        .footer-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-bottom: 30px;
+            padding-left: 70px;
+            padding-right: 70px;
+        }
+
+        .footer-container div {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .footer-container div h4 {
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .footer-container div p {
+            font-size: 0.9rem;
+            color: #d8d8d8;
+            margin: 5px 0;
+        }
+
+        .social-links a {
+            margin: 0 10px;
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            color: #007BFF;
+        }
+
+        .footer-bottom {
+            font-size: 0.8rem;
+            color: #d8d8d8;
+            margin-top: 20px;
+            padding-left: 70px;
+        }
+    </style>
 </head>
 <body>
+
+  <%- include('partials/navAdmin') %>
+
+  <div class="container">
     <h1>Edit Room</h1>
     <hr>
     
     <form action="/editRoom/<%= roomSingleData.id %>" method="post">
+      <div class="form-group">
         <label for="roomName">Room Name:</label>
         <input type="text" name="roomName" id="roomName" placeholder="<%= roomSingleData.roomName %>" required>
-        <br>
+      </div>
 
+      <div class="form-group">
         <label for="roomPrice">Room Price:</label>
         <input type="number" name="roomPrice" id="roomPrice" placeholder="<%= roomSingleData.roomPrice %>" required>
-        <br>
+      </div>
 
-        <label for="roomDescription">Room Description</label>
+      <div class="form-group">
+        <label for="roomDescription">Room Description:</label>
         <textarea name="roomDescription" id="roomDescription" rows="4" placeholder="<%= roomSingleData.roomDescription %>" required></textarea>
-        <br><br>
+      </div>
 
-        <label for="roomType">Room Type</label>
+      <div class="form-group">
+        <label for="roomType">Room Type:</label>
         <select name="roomType" id="roomType" required>
-            <option value="single">Single</option>
-            <option value="double">Double</option>
-            <option value="suite">Suite</option>
+          <option value="single" <%= roomSingleData.roomType === 'single' ? 'selected' : '' %>>Single</option>
+          <option value="double" <%= roomSingleData.roomType === 'double' ? 'selected' : '' %>>Double</option>
+          <option value="suite" <%= roomSingleData.roomType === 'suite' ? 'selected' : '' %>>Suite</option>
         </select>
-        <br><br>
+      </div>
 
-        <label for="roomCapacity">Room Capacity</label>
+      <div class="form-group">
+        <label for="roomCapacity">Room Capacity:</label>
         <select name="roomCapacity" id="roomCapacity">
-            <option value=1>one</option>
-            <option value=2>two</option>
-            <option value=4>four</option>
+          <option value="1" <%= roomSingleData.roomCapacity == 1 ? 'selected' : '' %>>One</option>
+          <option value="2" <%= roomSingleData.roomCapacity == 2 ? 'selected' : '' %>>Two</option>
+          <option value="4" <%= roomSingleData.roomCapacity == 4 ? 'selected' : '' %>>Four</option>
         </select>
-        <br><br>
+      </div>
 
-        <button type="submit">Confirm</button>
+      <button type="submit">Confirm</button>
     </form>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+        <div>
+            <h4>Company</h4>
+            <p>About Us</p>
+            <p>Careers</p>
+            <p>Privacy Policy</p>
+            <p>Terms of Service</p>
+        </div>
+        <div>
+            <h4>Services</h4>
+            <p>Customer Support</p>
+            <p>FAQ</p>
+            <p>Room Booking</p>
+            <p>Contact Us</p>
+        </div>
+        <div>
+            <h4>Follow Us</h4>
+            <div class="social-links">
+                <a href="#">Facebook</a>
+                <a href="#">Twitter</a>
+                <a href="#">Instagram</a>
+            </div>
+        </div>
+        <div>
+            <h4>Contact</h4>
+            <p>Email: support@redwoodhotel.com</p>
+            <p>Phone: +1 234 567 890</p>
+            <p>Address: 123 Redwood St, City, Country</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2025 Redwood Hotel. All Rights Reserved.</p>
+    </div>
+  </footer>
+
 </body>
 </html>

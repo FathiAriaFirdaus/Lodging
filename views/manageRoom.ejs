@@ -3,43 +3,261 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Room Manager</title>
+    <style>
+        /* Body */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #ffffff;
+            padding: 15px 40px;
+            color: white;
+            margin-bottom: 0;
+            border-radius: 0;
+            border-bottom: #d8d8d8 solid 0.3px;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        nav ul li {
+            font-size: 16px;
+        }
+
+        nav ul li a {
+            color: rgb(0, 0, 0);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+        }
+
+        nav ul li a:hover {
+            background-color: #007BFF;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        form {
+            margin: 10px 0;
+            display: inline-block;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .room-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .room-card {
+            background-color: #ffffff;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            width: 250px;
+            padding: 15px;
+            text-align: left; /* Mengubah text align menjadi kiri */
+        }
+
+        .room-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .room-card p {
+            font-size: 14px;
+            margin: 5px 0;
+        }
+
+        .room-card button {
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .no-room {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #888;
+        }
+
+        /* Footer Styling */
+        footer {
+            background-color: #1d1d1d;
+            color: #ffffff;
+            padding: 40px 0;
+            text-align: left; /* Mengubah text align menjadi kiri */
+        }
+
+        .footer-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-bottom: 30px;
+            padding-left: 70px;
+            padding-right: 70px;
+        }
+
+        .footer-container div {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .footer-container div h4 {
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .footer-container div p {
+            font-size: 0.9rem;
+            color: #d8d8d8;
+            margin: 5px 0;
+        }
+
+        .social-links a {
+            margin: 0 10px;
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            color: #007BFF;
+        }
+
+        .footer-bottom {
+            font-size: 0.8rem;
+            color: #d8d8d8;
+            margin-top: 20px;
+            padding-left: 70px;
+        }
+
+    </style>
 </head>
 <body>
-    
+
+    <nav>
+        <ul>
+            <li><a href="/homeAdmin">Home</a></li>
+            <li><a href="/manageRoom">Manage Room</a></li>
+            <li><a href="/manageReceptionist">Manage Receptionist</a></li>
+            <li><a href="/report">Report</a></li>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </nav>
+
+  <div class="container">
     <h2>Room Manager</h2>
 
     <form action="/addRoom" method="get">
         <button type="submit">Add Room</button>
     </form>
     <hr>
-  
-    <div>
-    <% if (roomData.length > 0) { %>
-      <% roomData.forEach(room => { %>
-        <div>
-          <img src="/uploads/<%= room.roomImage %>" alt="Room Image" style="width: 200px;height: auto;">
-          <p><%= room.roomName %></p>
-          <p><%= room.roomType %></p>
-          <p><%= room.roomPrice %>$</p>
 
-        <% if (room.roomAvailable === true) { %>
-        <form action="/editRoom/<%= room.id %>" method="get">
-            <button type="submit">Edit Room</button>
-        </form>
-        <form action="/deleteRoom/<%= room.id %>" method="post">
-            <input type="hidden" name="_method" value="DELETE">
-            <button type="submit">Delete Room</button>
-        </form>
-        <% } %>
+    <div class="room-container">
+      <% if (roomData.length > 0) { %>
+        <% roomData.forEach(room => { %>
+          <div class="room-card">
+            <img src="/uploads/<%= room.roomImage %>" alt="Room Image">
+            <p><strong><%= room.roomName %></strong></p>
+            <p>Type: <%= room.roomType %></p>
+            <p>Price: <%= room.roomPrice %>$</p>
 
-      </div>
-      <% }); %>
-    <% } else { %>
-      <p>No room available currently</p>
-    <% } %>
+            <% if (room.roomAvailable === true) { %>
+              <form action="/editRoom/<%= room.id %>" method="get">
+                  <button type="submit">Edit Room</button>
+              </form>
+              <form action="/deleteRoom/<%= room.id %>" method="post">
+                  <input type="hidden" name="_method" value="DELETE">
+                  <button type="submit">Delete Room</button>
+              </form>
+            <% } %>
+          </div>
+        <% }); %>
+      <% } else { %>
+        <div class="no-room">
+          <p>No room available currently</p>
+        </div>
+      <% } %>
     </div>
-  
+
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+        <div>
+            <h4>Company</h4>
+            <p>About Us</p>
+            <p>Careers</p>
+            <p>Privacy Policy</p>
+            <p>Terms of Service</p>
+        </div>
+        <div>
+            <h4>Services</h4>
+            <p>Customer Support</p>
+            <p>FAQ</p>
+            <p>Room Booking</p>
+            <p>Contact Us</p>
+        </div>
+        <div>
+            <h4>Follow Us</h4>
+            <div class="social-links">
+                <a href="#">Facebook</a>
+                <a href="#">Twitter</a>
+                <a href="#">Instagram</a>
+            </div>
+        </div>
+        <div>
+            <h4>Contact</h4>
+            <p>Email: support@redwoodhotel.com</p>
+            <p>Phone: +1 234 567 890</p>
+            <p>Address: 123 Redwood St, City, Country</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2025 Redwood Hotel. All Rights Reserved.</p>
+    </div>
+  </footer>
 
 </body>
 </html>

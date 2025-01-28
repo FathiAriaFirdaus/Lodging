@@ -1,45 +1,223 @@
-<%- include('partials/header') %>
-<div class="container mt-5">
-  <h1>Register</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - Redwood Hotel</title>
+  <style>
+    /* Reset and general styling */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-  <div class="row">
-    <div class="col-sm-8">
-      <div class="card">
-        <div class="card-body">
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url('/images/bgver.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
 
-          <!-- Makes POST request to /register route -->
-          <form action="/register" method="POST">
-            <div class="form-group">
-              <label for="name">name</label>
-              <input type="text" class="form-control" name="name">
-            </div>
-            <div class="form-group">
-              <label for="email">Email</label>
-              <input type="email" class="form-control" name="username">
-            </div>
-            <div class="form-group">
-              <label for="password">Password</label>
-              <input type="password" class="form-control" name="password">
-            </div>
-            <button type="submit" class="btn btn-dark">Register</button>
-          </form>
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: white;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      flex-grow: 1;
+    }
 
+    h1 {
+      text-align: center;
+      color: black;
+      margin-bottom: 10px;
+    }
+
+    p {
+      text-align: center;
+      color: black;
+      font-size: 18px;
+      margin-top: 0;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      font-weight: bold;
+      color: black;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    .btn {
+      background-color: #007BFF;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    .btn:hover {
+      background-color: #0056b3;
+    }
+
+    button {
+      background-color: #28a745;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #218838;
+    }
+
+    footer {
+      background-color: #1d1d1d;
+      color: #ffffff;
+      padding: 40px 70px;
+    }
+
+    .footer-container {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 30px;
+    }
+
+    .footer-container div {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .footer-container h4 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+
+    .footer-container ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .footer-container ul li {
+      font-size: 0.9rem;
+      color: #d8d8d8;
+      margin: 5px 0;
+    }
+
+    .social-links a {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 0.9rem;
+      display: inline-block;
+      margin-right: 10px;
+    }
+
+    .social-links a:hover {
+      color: #007BFF;
+    }
+
+    .footer-bottom {
+      text-align: left;
+      margin-top: 20px;
+    }
+
+    .footer-bottom p {
+      font-size: 0.9rem;
+      color: #ffffff;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Register</h1>
+    <p>Redwood Hotel</p>
+    <div class="card">
+      <form action="/register" method="POST">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" class="form-control" name="name" id="name" required>
         </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" class="form-control" name="username" id="email" required>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" class="form-control" name="password" id="password" required>
+        </div>
+        <button type="submit" class="btn">Register</button>
+      </form>
+      <form action="/login" method="get">
+        <button type="button" onclick="window.location.href='/login';">Login</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li>About Us</li>
+          <li>Careers</li>
+          <li>Privacy Policy</li>
+          <li>Terms of Service</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Services</h4>
+        <ul>
+          <li>Customer Support</li>
+          <li>FAQ</li>
+          <li>Room Booking</li>
+          <li>Contact Us</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Follow Us</h4>
+        <ul class="social-links">
+          <li><a href="#">Facebook</a></li>
+          <li><a href="#">Twitter</a></li>
+          <li><a href="#">Instagram</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li>Email: support@redwoodhotel.com</li>
+          <li>Phone: +1 234 567 890</li>
+          <li>Address: 123 Redwood St, City, Country</li>
+        </ul>
       </div>
     </div>
-
-    <!-- <div class="col-sm-4">
-      <div class="card social-block">
-        <div class="card-body">
-          <a class="btn btn-block" href="/auth/google" role="button">
-            <i class="fab fa-google"></i>
-            Sign Up with Google
-          </a>
-        </div>
-      </div>
-    </div> -->
-
-  </div>
-</div>
-
-<%- include('partials/header') %>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Redwood Hotel. All Rights Reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>

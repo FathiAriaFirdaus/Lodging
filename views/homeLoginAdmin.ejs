@@ -5,28 +5,232 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* Body */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+
+    /* Navigation */
+    nav {
+      background-color: #ffffff;
+      padding: 15px 40px; /* Memberikan padding kiri untuk geser ke kanan */
+      color: white;
+      margin-bottom: 0;
+      border-radius: 0;
+      border-bottom: #d8d8d8 solid 0.3px;
+    }
+
+    nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      justify-content: flex-start; /* Semua elemen tetap ke kiri */
+      align-items: center;
+    }
+
+    nav ul li {
+      font-size: 16px;
+    }
+
+    nav ul li a {
+      color: rgb(0, 0, 0);
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+    }
+
+    nav ul li a:hover {
+      background-color: #007BFF;
+    }
+
+    /* Hero Section */
+    .container-hero {
+      position: relative;
+      background-image: url('images/bg.jpg');
+            background-size: cover; /* atau coba cover */
+            background-repeat: no-repeat;
+            background-position: center;
+            background-attachment: fixed;
+      color: rgb(0, 0, 0);
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 20px;
+      border-radius: 0;
+      border-bottom: #d8d8d8 solid 0.3px;
+    }
+
+    .container-hero h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      color: white;
+    }
+
+    .container-hero h2 {
+      font-size: 1.8rem;
+      color: #ffffff;
+    }
+
+    /* Grafik dan konten */
+    .container {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 20px;
+      background-color: white;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+    }
+
+    .charts {
+      display: flex;
+      gap: 30px;
+      justify-content: space-between;
+    }
+
+    .chart-container {
+      flex: 1;
+      padding: 10px;
+      background-color: #ffffff;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+    }
+
+    canvas {
+      display: block;
+      margin: 0 auto;
+      border-radius: 8px;
+    }
+
+    /* Footer Styling */
+    footer {
+      background-color: #1d1d1d;
+      color: #ffffff;
+      padding: 40px 0;
+      text-align: left;
+      margin-top: 50px;
+    }
+
+    .footer-container {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 40px;
+      margin-bottom: 30px;
+      padding-left: 70px;
+      padding-right: 70px;
+    }
+
+    .footer-container div {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .footer-container div h4 {
+      margin-bottom: 10px;
+      font-size: 1.2rem;
+    }
+
+    .footer-container div p {
+      font-size: 0.9rem;
+      color: #d8d8d8;
+      margin: 5px 0;
+    }
+
+    .social-links a {
+      margin: 0 10px;
+      color: #ffffff;
+      text-decoration: none;
+    }
+
+    .social-links a:hover {
+      color: #007BFF;
+    }
+
+    .footer-bottom {
+      font-size: 0.8rem;
+      color: #d8d8d8;
+      margin-top: 20px;
+      padding-left: 70px;
+    }
+  </style>
 </head>
 <body>
+
   <nav>
     <ul>
       <li><a href="/homeAdmin">Home</a></li>
-      <li><a href="/logout">Logout</a></li>
       <li><a href="/manageRoom">Manage Room</a></li>
       <li><a href="/manageReceptionist">Manage Receptionist</a></li>
+      <li><a href="/report">Report</a></li>
+      <li><a href="/logout">Logout</a></li>
       <li>About</li>
     </ul>
   </nav>
 
-  <h1>Trinity Lodge</h1>
+  <div class="container-hero">
+    <h1>Redwood Hotel</h1>
+    <h2>Admin Dashboard</h2>
+  </div>
 
-  <!-- Simpan data di data-* attributes -->
-  <div id="chartData" data-report="<%= JSON.stringify(reportData) %>"></div>
+  <div class="container">
+    <div id="chartData" data-report="<%= JSON.stringify(reportData) %>"></div>
 
-  <!-- Grafik Total Reservasi -->
-  <canvas id="reservationChart" width="400" height="200"></canvas>
+    <div class="charts">
+      <!-- Grafik Total Reservasi -->
+      <div class="chart-container">
+        <h3>Total Reservations</h3>
+        <canvas id="reservationChart" width="400" height="200"></canvas>
+      </div>
 
-  <!-- Grafik Total Pemasukan -->
-  <canvas id="incomeChart" width="400" height="200"></canvas>
+      <!-- Grafik Total Pemasukan -->
+      <div class="chart-container">
+        <h3>Total Income</h3>
+        <canvas id="incomeChart" width="400" height="200"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+<footer>
+  <div class="footer-container">
+      <div>
+          <h4>Company</h4>
+          <p>About Us</p>
+          <p>Careers</p>
+          <p>Privacy Policy</p>
+          <p>Terms of Service</p>
+      </div>
+      <div>
+          <h4>Services</h4>
+          <p>Customer Support</p>
+          <p>FAQ</p>
+          <p>Room Booking</p>
+          <p>Contact Us</p>
+      </div>
+      <div>
+          <h4>Follow Us</h4>
+          <div class="social-links">
+              <a href="#">Facebook</a>
+              <a href="#">Twitter</a>
+              <a href="#">Instagram</a>
+          </div>
+      </div>
+      <div>
+          <h4>Contact</h4>
+          <p>Email: support@redwoodhotel.com</p>
+          <p>Phone: +1 234 567 890</p>
+          <p>Address: 123 Redwood St, City, Country</p>
+      </div>
+  </div>
+  <div class="footer-bottom">
+      <p>&copy; 2025 Redwood Hotel. All Rights Reserved.</p>
+  </div>
+</footer>
+
 
   <script>
     // Ambil data dari elemen dengan id "chartData"
@@ -49,10 +253,23 @@
         datasets: [{
           label: "Total Reservations",
           data: reservations,
-          backgroundColor: "rgba(75, 192, 192, 0.2)",
+          backgroundColor: "rgba(75, 192, 192, 0.5)",
           borderColor: "rgba(75, 192, 192, 1)",
           borderWidth: 1,
         }],
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        },
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+        },
       },
     });
 
@@ -67,8 +284,16 @@
           data: income,
           backgroundColor: "rgba(255, 99, 132, 0.2)",
           borderColor: "rgba(255, 99, 132, 1)",
-          borderWidth: 1,
+          borderWidth: 2,
         }],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+        },
       },
     });
   </script>

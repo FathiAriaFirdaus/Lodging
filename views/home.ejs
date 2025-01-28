@@ -3,65 +3,364 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Trinity Lodge</title>
+  <style>
+    /* Body */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+
+    /* Navigation */
+    nav {
+      background-color: #ffffff;
+      padding: 15px 40px;
+      margin-bottom: 0;
+      border-radius: 0;
+      border-bottom: #d8d8d8 solid 0.3px;
+    }
+
+    nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+    }
+
+    nav ul li {
+      font-size: 16px;
+    }
+
+    nav ul li a {
+      color: rgb(0, 0, 0);
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+    }
+
+    nav ul li a:hover {
+      background-color: #007BFF;
+    }
+
+    /* Hero Section */
+    .container-hero {
+      position: relative;
+      
+      background-image: url('images/bg.jpg');
+            background-size: cover; /* atau coba cover */
+            background-repeat: no-repeat;
+            background-position: center;
+            background-attachment: fixed;
+
+      color: rgb(0, 0, 0);
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 20px;
+      border-radius: 0;
+      border-bottom: #d8d8d8 solid 0.3px;
+    }
+
+    .container-hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: white;
+    }
+
+    /* Filter Form */
+    .form-filter {
+      display: flex;
+      align-items: stretch;
+      background-color: white;
+      padding: 10px 20px;
+      border-radius: 10px;
+      max-width: 900px;
+      margin: 0 auto;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 35px;
+    }
+
+    .form-filter div {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 0 20px;
+      flex: 1;
+      position: relative;
+    }
+
+    .form-filter div:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background-color: #ddd;
+    }
+
+    .form-filter label {
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: black;
+    }
+
+    .form-filter input,
+    .form-filter select {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .form-filter button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 20px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .form-filter button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Room List */
+    h2 {
+      margin: 30px 0 15px;
+      text-align: left;
+      color: #333;
+      font-size: 1.8rem;
+      font-weight: bold;
+      padding-left: 267px;
+    }
+
+    .room-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: flex-start;
+      margin: 0 auto;
+      max-width: 1000px;
+      padding: 0 50px;
+    }
+
+    .room-card {
+      background-color: white;
+      border-radius: 10px;
+      overflow: hidden;
+      width: 23%;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 0;
+      text-align: left;
+    }
+
+    .room-card img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .room-card a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .room-card p {
+      margin: 10px 15px;
+      color: #555;
+    }
+
+    .room-card .room-name {
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .room-card .room-price {
+      font-weight: bold;
+      font-size: 1.1rem;
+      color: #007BFF;
+    }
+
+    .room-card .detail-btn {
+      display: block;
+      margin: 15px;
+      padding: 10px 20px;
+      background-color: #007BFF;
+      color: white;
+      text-align: center;
+      border-radius: 5px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    .room-card .detail-btn:hover {
+      background-color: #0056b3;
+    }
+
+    /* Footer Styling */
+    footer {
+      background-color: #1d1d1d;
+      color: #ffffff;
+      padding: 40px 0;
+      text-align: left;
+      margin-top: 50px;
+    }
+
+    .footer-container {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 40px;
+      margin-bottom: 30px;
+      padding-left: 70px;
+      padding-right: 70px;
+    }
+
+    .footer-container div {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .footer-container div h4 {
+      margin-bottom: 10px;
+      font-size: 1.2rem;
+    }
+
+    .footer-container div p {
+      font-size: 0.9rem;
+      color: #d8d8d8;
+      margin: 5px 0;
+    }
+
+    .social-links a {
+      margin: 0 10px;
+      color: #ffffff;
+      text-decoration: none;
+    }
+
+    .social-links a:hover {
+      color: #007BFF;
+    }
+
+    .footer-bottom {
+      font-size: 0.8rem;
+      color: #d8d8d8;
+      margin-top: 20px;
+      padding-left: 70px;
+    }
+  </style>
 </head>
 <body>
-  <nav>
-    <ul>
-      <li>room</li>
-      <li>about</li>
-      <li><a href="/login">login</a></li>
-      <li><a href="/register">register</a></li>
-      <li><a href="/addRoom">add room</a></li>
-    </ul>
-  </nav>
 
-  
-  <h1>Trinity Lodge</h1>
+<!-- Nav Bar -->
+<nav>
+  <ul>
+    <li><a href="">Home</a></li>
+    <li><a href="">About</a></li>
+    <li><a href="/login">Login</a></li>
+    <li><a href="/register">Register</a></li>
+  </ul>
+</nav>
 
-  <div>
-    <form action="/filterRoom" method="get">
+<!-- Hero Section -->
+<div class="container-hero">
+  <h1>Redwood Hotel</h1>
+  <form action="/filterRoom" method="get" class="form-filter">
+    <div>
       <label for="roomMinPrice">Minimum Price</label>
-      <input type="number" name="roomMinPrice" id="roomMinPrice">
-
+      <input type="number" name="roomMinPrice" id="roomMinPrice" placeholder="0$">
+    </div>
+    <div>
       <label for="roomMaxPrice">Maximum Price</label>
-      <input type="number" name="roomMaxPrice" id="roomMaxPrice">
-
+      <input type="number" name="roomMaxPrice" id="roomMaxPrice" placeholder="1000$">
+    </div>
+    <div>
       <label for="roomCapacity">Capacity</label>
       <select name="roomCapacity" id="roomCapacity">
-        <option value=1>one</option>
-        <option value=2>two</option>
-        <option value=4>four</option>
+        <option value="1">one</option>
+        <option value="2">two</option>
+        <option value="4">four</option>
       </select>
-
+    </div>
+    <div>
       <label for="roomType">Type</label>
       <select name="roomType" id="roomType">
         <option value="single">single</option>
         <option value="double">double</option>
         <option value="suite">suite</option>
       </select>
-      <button type="submit">search</button>
-    </form>
-  </div>
+    </div>
+    <button type="submit">Search</button>
+  </form>
+</div>
 
-  <h2>Best Deal</h2>
-  
-  <div>
+<!-- Best Deal Section -->
+<h2>Best Deal</h2>
+
+<div class="room-list">
   <% if (roomData.length > 0) { %>
     <% roomData.forEach(room => { %>
-      <div>
-      <a href="/detailRoom/<%= room.id %>">
-        <img src="/uploads/<%= room.roomImage %>" alt="Room Image" style="width: 200px;height: auto;">
-        <p><%= room.roomName %></p>
-        <p><%= room.roomType %></p>
-        <p><%= room.roomPrice %>$</p>
-      </a>
-    </div>
+      <div class="room-card">
+        <a href="/detailRoom/<%= room.id %>">
+          <img src="/uploads/<%= room.roomImage %>" alt="Room Image">
+          <p class="room-name"><%= room.roomName %></p>
+          <p><%= room.roomType %></p>
+          <p class="room-price"><%= room.roomPrice %>$</p>
+          <p class="detail-btn">Check Detail</p>
+        </a>
+      </div>
     <% }); %>
   <% } else { %>
-    <p>No room available currently</p>
+    <p>No rooms available currently.</p>
   <% } %>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-container">
+      <div>
+          <h4>Company</h4>
+          <p>About Us</p>
+          <p>Careers</p>
+          <p>Privacy Policy</p>
+          <p>Terms of Service</p>
+      </div>
+      <div>
+          <h4>Services</h4>
+          <p>Customer Support</p>
+          <p>FAQ</p>
+          <p>Room Booking</p>
+          <p>Contact Us</p>
+      </div>
+      <div>
+          <h4>Follow Us</h4>
+          <div class="social-links">
+              <a href="#">Facebook</a>
+              <a href="#">Twitter</a>
+              <a href="#">Instagram</a>
+          </div>
+      </div>
+      <div>
+          <h4>Contact</h4>
+          <p>Email: support@redwoodhotel.com</p>
+          <p>Phone: +1 234 567 890</p>
+          <p>Address: 123 Redwood St, City, Country</p>
+      </div>
   </div>
+  <div class="footer-bottom">
+      <p>&copy; 2025 Redwood Hotel. All Rights Reserved.</p>
+  </div>
+</footer>
+
 
 </body>
 </html>
