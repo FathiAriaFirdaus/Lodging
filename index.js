@@ -51,18 +51,18 @@ app.use('/', reservationRouter);
 app.use('/', paymentRouter);
 
 
-// sequelize.sync({ alter: true }) // Bisa pakai { force: true } untuk reset tabel (hati-hati!)
-//   .then(() => {
-//     console.log("Database synced successfully!");
+sequelize.sync({ alter: true }) // Bisa pakai { force: true } untuk reset tabel (hati-hati!)
+  .then(() => {
+    console.log("Database synced successfully!");
 
-//     app.listen(port, () => {
-//       console.log(`Server running on port: ${port}`);
-//     });
-//   })
-//   .catch((err) => {
-//     console.error("Failed to sync database:", err);
-//   });
+    app.listen(port, () => {
+      console.log(`Server running on port: ${port}`);
+    });
+  })
+  .catch((err) => {
+    console.error("Failed to sync database:", err);
+  });
 
-app.listen(port, () => {
-  console.log(`Server running on port: ${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`Server running on port: ${port}`);
+// });
