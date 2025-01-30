@@ -9,10 +9,13 @@ import loginRouter from "./routes/login.js";
 import roomRouter from "./routes/room.js";
 import reservationRouter from "./routes/reservation.js";
 import paymentRouter from "./routes/payment.js";
-import { User, Room, Reservation } from './relation.js';
-
 
 import { Sequelize } from "sequelize";
+import sequelize from "./db.js";
+import './relation.js';
+import Reps from './models/Reps.js';
+import { User, Room, Reservation } from './relation.js';
+
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -47,6 +50,15 @@ app.use('/', roomRouter);
 app.use('/', reservationRouter);
 app.use('/', paymentRouter);
 
-app.listen(port, ()=> {
-    console.log(`Server running on port:${port}`)
-});
+
+sequelize.sync({ alter: true }) // Bisa pakai { force: true } untuk reset tabel (hati-hati!)
+  .then(() => {
+    console.log("Database synced successfully!");
+
+    app.listen(port, () => {
+      console.log(`Server running on port: ${port}`);
+    });
+  })
+  .catch((err) => {
+    console.error("Failed to sync database:", err);
+  });
