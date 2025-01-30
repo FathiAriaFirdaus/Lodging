@@ -4,7 +4,6 @@ import ReservationService from "../models/ReservationService.js";
 import Service from "../models/Service.js";
 import Room from "../models/Room.js";
 import { User } from "../relation.js";
-import models from "../models/index.js";
 
 const reservationView = async(req, res) => {
     console.log('reservationView ENDPOINT 1 HIT');

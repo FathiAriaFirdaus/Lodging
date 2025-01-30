@@ -1,5 +1,5 @@
 // models/relation.js
-import User from './models/user.js';
+import User from './models/User.js';
 import Room from './models/Room.js';
 import Reservation from './models/Reservation.js';
 import Payment from './models/Payment.js';
