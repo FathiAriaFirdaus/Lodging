@@ -337,36 +337,45 @@
     </div>
   </footer>
 
-    <script>
-        function calculatePrice() {
-            const checkInDate = document.getElementById("checkInDate").value;
-            const checkOutDate = document.getElementById("checkOutDate").value;
-            const roomPrice = parseFloat(document.getElementById("roomPrice").innerText);
-            let totalPrice = roomPrice;
+  <script>
+    function calculatePrice() {
+        const checkInDate = document.getElementById("checkInDate").value;
+        const checkOutDate = document.getElementById("checkOutDate").value;
+        const roomPrice = parseFloat(document.getElementById("roomPrice").innerText);
+        let totalPrice = 0;
 
-            if (checkInDate && checkOutDate) {
-                const checkIn = new Date(checkInDate);
-                const checkOut = new Date(checkOutDate);
-                const days = Math.ceil((checkOut - checkIn) / (1000 * 3600 * 24));
-                if (days > 0) {
-                    totalPrice *= days;
-                }
+        if (checkInDate && checkOutDate) {
+            const checkIn = new Date(checkInDate);
+            const checkOut = new Date(checkOutDate);
+            const days = Math.ceil((checkOut - checkIn) / (1000 * 3600 * 24));
+
+            if (days > 0) {
+                totalPrice = roomPrice * days;
             }
-
-            document.getElementById("totalPrice").innerText = `Total price: $${totalPrice.toFixed(2)}`;
-            document.getElementById("totalPriceInput").value = totalPrice;
         }
 
-        function updateServices() {
-            const services = [];
-            const selectedServices = document.querySelectorAll('input[name="services[]"]:checked');
-            selectedServices.forEach(service => {
-                services.push(service.value);
-            });
+        // Tambahkan biaya layanan tambahan
+        document.querySelectorAll('input[name="services[]"]:checked').forEach(service => {
+            totalPrice += parseFloat(service.dataset.price);
+        });
 
-            document.getElementById("selectedServicesInput").value = services.join(",");
-        }
-    </script>
+        // Update tampilan harga total
+        document.getElementById("totalPrice").innerText = `Total price: $${totalPrice.toFixed(2)}`;
+        document.getElementById("totalPriceInput").value = totalPrice;
+
+        // Update daftar layanan tambahan
+        updateServices();
+    }
+
+    function updateServices() {
+        const services = [];
+        document.querySelectorAll('input[name="services[]"]:checked').forEach(service => {
+            services.push(service.value);
+        });
+
+        document.getElementById("selectedServicesInput").value = services.join(",");
+    }
+</script>
 
 </body>
 </html>
