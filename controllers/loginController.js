@@ -330,25 +330,48 @@ export const downloadReport = async (req, res) => {
       });
   
       // Buat dokumen PDF
-      const doc = new PDFDocument();
+      const doc = new PDFDocument({ margin: 50 });
       const filePath = path.join(__dirname, "../public/reports/report.pdf");
-  
-      // Simpan PDF ke file
       const writeStream = fs.createWriteStream(filePath);
       doc.pipe(writeStream);
   
-      // Header dokumen
-      doc.fontSize(18).text("Monthly Report", { align: "center" }).moveDown();
+      // Judul laporan
+      doc.font("Helvetica-Bold").fontSize(20).text("Monthly Report", { align: "center" });
+      doc.moveDown(1);
   
-      // Tabel laporan
-      doc.fontSize(12);
-      doc.text("Month | Year | Total Reservations | Total Income", { underline: true });
+      // Garis pemisah
+      doc.moveTo(50, doc.y).lineTo(550, doc.y).stroke();
+      doc.moveDown(1);
+  
+      // Header tabel
+      doc.fontSize(12).font("Helvetica-Bold");
+      const columnWidths = [100, 100, 150, 150]; // Lebar kolom
+      const startX = 50;
+      let startY = doc.y;
+  
+      // Header row
+      doc
+        .text("Month", startX, startY, { width: columnWidths[0], align: "center" })
+        .text("Year", startX + columnWidths[0], startY, { width: columnWidths[1], align: "center" })
+        .text("Total Reservations", startX + columnWidths[0] + columnWidths[1], startY, { width: columnWidths[2], align: "center" })
+        .text("Total Income", startX + columnWidths[0] + columnWidths[1] + columnWidths[2], startY, { width: columnWidths[3], align: "center" });
+  
+      // Garis bawah header
+      doc.moveDown(0.5);
+      doc.moveTo(50, doc.y).lineTo(550, doc.y).stroke();
       doc.moveDown(0.5);
   
+      // Isi tabel
+      doc.font("Helvetica").fontSize(10);
       mergedData.forEach((data) => {
-        doc.text(
-          `${data.month} | ${data.year} | ${data.totalReservations} | $${data.totalIncome}`
-        );
+        startY = doc.y;
+        doc
+          .text(data.month, startX, startY, { width: columnWidths[0], align: "center" })
+          .text(data.year, startX + columnWidths[0], startY, { width: columnWidths[1], align: "center" })
+          .text(data.totalReservations, startX + columnWidths[0] + columnWidths[1], startY, { width: columnWidths[2], align: "center" })
+          .text(`$${data.totalIncome.toLocaleString()}`, startX + columnWidths[0] + columnWidths[1] + columnWidths[2], startY, { width: columnWidths[3], align: "right" });
+  
+        doc.moveDown(0.5);
       });
   
       // Akhiri dokumen

@@ -197,7 +197,7 @@
       <% if (roomData.length > 0) { %>
         <% roomData.forEach(room => { %>
           <div class="room-card">
-            <img src="/uploads/<%= room.roomImage %>" alt="Room Image">
+            <img src="<%= room.roomImage %>" alt="Room Image">
             <p><strong><%= room.roomName %></strong></p>
             <p>Type: <%= room.roomType %></p>
             <p>Price: <%= room.roomPrice %>$</p>

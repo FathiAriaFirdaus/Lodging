@@ -199,7 +199,7 @@
             <% reservationData.forEach(reservation => { %>
               <div>
                 <a href="/detailReservation/<%= reservation.Room.id %>">
-                  <img src="/uploads/<%= reservation.Room.roomImage %>" alt="Room Image">
+                  <img src="<%= reservation.Room.roomImage %>" alt="Room Image">
                   <p>Name: <%= reservation.User ? reservation.User.name : "Guest" %></p>
                   <p><%= reservation.Room.roomName %></p>
                   <p><%= reservation.checkInDate %>$</p>

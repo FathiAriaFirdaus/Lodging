@@ -215,7 +215,7 @@
         <% reservationData.forEach(reservation => { %>
           <div class="reservation-card">
             <a href="/detailReservation/<%= reservation.id %>">
-              <img src="/uploads/<%= reservation.Room.roomImage %>" alt="Room Image">
+              <img src="<%= reservation.Room.roomImage %>" alt="Room Image">
               <p><strong><%= reservation.Room.roomName %></strong></p>
               <p>Type: <%= reservation.Room.roomType %></p>
               <p>Price: <%= reservation.totalPrice %></p>

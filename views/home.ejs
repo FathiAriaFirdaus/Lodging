@@ -311,7 +311,7 @@
     <% roomData.forEach(room => { %>
       <div class="room-card">
         <a href="/detailRoom/<%= room.id %>">
-          <img src="/uploads/<%= room.roomImage %>" alt="Room Image">
+          <img src="<%= room.roomImage %>" alt="Room Image">
           <p class="room-name"><%= room.roomName %></p>
           <p><%= room.roomType %></p>
           <p class="room-price"><%= room.roomPrice %>$</p>

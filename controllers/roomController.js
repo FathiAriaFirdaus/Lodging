@@ -1,6 +1,7 @@
 import Room from "../models/Room.js";
 import Service from "../models/Service.js";
 import { Op } from "sequelize";
+import { upload, uploadToCloudinary } from '../middlewares/upload.js';
 
 const addRoomView = async (req, res) => {
     res.render('addRoom.ejs');
@@ -13,7 +14,7 @@ const addRoom = async (req, res) => {
     const roomCapacity = req.body.roomCapacity;
     const roomPrice = req.body.roomPrice;
     const roomDescription = req.body.roomDescription;
-    const roomImage = req.file ? req.file.filename : null;
+    const roomImage = req.file ? req.file.cloudinaryUrl : null;
 
     try {
         const room = await Room.create({
