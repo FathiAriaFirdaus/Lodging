@@ -18,9 +18,16 @@ router.get('/manageReceptionist', ensureAuthenticate, checkUserLevel('admin'), l
 router.get('/editReceptionist/:id', ensureAuthenticate, checkUserLevel('admin'), loginController.editReceptionistView);
 router.post('/editReceptionist/:id', ensureAuthenticate, checkUserLevel('admin'), loginController.editReceptionist);
 router.delete('/deleteReceptionist/:id', ensureAuthenticate, checkUserLevel('admin'), loginController.deleteReceptionist);
-
 router.get('/addReceptionist', ensureAuthenticate, checkUserLevel('admin'), loginController.addReceptionistView);
 router.post('/addReceptionist', ensureAuthenticate, checkUserLevel('admin'), loginController.addReceptionist);
+
+router.get('/manageService', ensureAuthenticate, checkUserLevel('admin'), loginController.manageServiceView);
+router.get('/editService/:id', ensureAuthenticate, checkUserLevel('admin'), loginController.editServiceView);
+router.post('/editService/:id', ensureAuthenticate, checkUserLevel('admin'), loginController.editService);
+router.delete('/deleteService/:id', ensureAuthenticate, checkUserLevel('admin'), loginController.deleteService);
+router.get('/addService', ensureAuthenticate, checkUserLevel('admin'), loginController.addServiceView);
+router.post('/addService', ensureAuthenticate, checkUserLevel('admin'), loginController.addService);
+
 
 router.post('/login', (req, res, next) => {
     console.log("Login route triggered");

@@ -4,6 +4,7 @@ import Room from "../models/Room.js";
 import bcrypt, { hash } from "bcrypt";
 import Reservation from "../models/Reservation.js";
 import Payment from "../models/Payment.js";
+import Service from "../models/Service.js";
 import { fn, col, Op } from "sequelize";
 import sequelize from "../db.js";
 import PDFDocument from "pdfkit";
@@ -158,6 +159,89 @@ const addReceptionist = async(req, res) => {
     }
     catch(err){
         res.status(500).send(err);
+    }
+}
+
+const manageServiceView = async(req, res) => {
+    try{
+        const service = await Service.findAll();
+
+        res.render("manageService.ejs", {serviceData: service});
+    }
+    catch(err){
+        res.status(500).send(err);
+    }
+}
+
+const editServiceView = async(req, res) => {
+    const serviceId = req.params.id;
+
+    try{
+        const service = await Service.findByPk(serviceId);
+        res.render("editService", {serviceSingleData: service});
+    }
+    catch(err){
+        res.status(500).send(err);
+    }
+}
+
+const editService = async(req, res) => {
+    const serviceId = req.params.id;
+    const serviceName = req.body.name;
+    const servicePrice = req.body.price;
+    const serviceDescription = req.body.description;
+
+    try{
+        const service = await Service.update(
+            {serviceName: serviceName,
+             servicePrice: servicePrice,
+             serviceDescription: serviceDescription,
+            },
+            {where: {id: serviceId}}
+        );
+
+        res.redirect("/manageService")
+    }
+    catch(err){
+        res.status(500).send(err);
+    }
+
+}
+
+const addServiceView = async(req, res) => {
+    res.render("addService.ejs");
+}
+
+const addService = async(req, res) => {
+    const serviceName = req.body.name;
+    const servicePrice = req.body.price;
+    const serviceDescription = req.body.description;
+
+    try{
+        const service = await Service.create({
+            serviceName: serviceName,
+            servicePrice: servicePrice,
+            serviceDescription: serviceDescription,
+        })
+
+        res.redirect("/manageService");
+    }
+    catch(err){
+        res.status(500).send(err);
+    }
+}
+
+const deleteService = async(req, res) => {
+    const serviceId = req.params.id;
+
+    try {
+        const server = await Service.destroy({
+            where: {id: serviceId}
+        });
+        res.redirect("/manageService")
+
+    } catch (err) {
+        res.status(500).send(err)
     }
 }
 
@@ -412,6 +496,11 @@ export default {
     addReceptionistView,
     addReceptionist,
     generateReport,
-    downloadReport
-
+    downloadReport,
+    manageServiceView,
+    editServiceView,
+    editService,
+    addServiceView,
+    addService,
+    deleteService,
 };

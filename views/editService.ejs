@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Room Manager</title>
+    <title>Edit Receptionist</title>
     <style>
         /* Body */
         body {
@@ -66,12 +66,31 @@
         form {
             margin: 10px 0;
             display: inline-block;
+            width: 100%;
+        }
+
+        label {
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 1rem;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        input[disabled], select[disabled] {
+            background-color: #f1f1f1;
         }
 
         button {
             background-color: #007BFF;
             color: white;
-            padding: 8px 16px;
+            padding: 10px 20px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
@@ -80,44 +99,6 @@
 
         button:hover {
             background-color: #0056b3;
-        }
-
-        .room-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
-        }
-
-        .room-card {
-            background-color: #ffffff;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            width: 250px;
-            padding: 15px;
-            text-align: left; /* Mengubah text align menjadi kiri */
-        }
-
-        .room-card img {
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
-        }
-
-        .room-card p {
-            font-size: 14px;
-            margin: 5px 0;
-        }
-
-        .room-card button {
-            margin-top: 10px;
-            width: 100%;
-        }
-
-        .no-room {
-            text-align: center;
-            font-size: 1.2rem;
-            color: #888;
         }
 
         /* Footer Styling */
@@ -188,40 +169,24 @@
       </nav>
 
   <div class="container">
-    <h2>Room Manager</h2>
-
-    <form action="/addRoom" method="get">
-        <button type="submit">Add Room</button>
-    </form>
+    <h2>Edit Services</h2>
     <hr>
 
-    <div class="room-container">
-      <% if (roomData.length > 0) { %>
-        <% roomData.forEach(room => { %>
-          <div class="room-card">
-            <img src="<%= room.roomImage %>" alt="Room Image">
-            <p><strong><%= room.roomName %></strong></p>
-            <p>Type: <%= room.roomType %></p>
-            <p>Price: <%= room.roomPrice %>$</p>
+    <form action="/editService/<%= serviceSingleData.id %>" method="post">
+        <label for="name">Service Name:</label>
+        <input type="text" name="name" id="name" placeholder="<%= serviceSingleData.serviceName %>" required>
+        <br>
 
-            <% if (room.roomAvailable === true) { %>
-              <form action="/editRoom/<%= room.id %>" method="get">
-                  <button type="submit">Edit Room</button>
-              </form>
-              <form action="/deleteRoom/<%= room.id %>" method="post">
-                  <input type="hidden" name="_method" value="DELETE">
-                  <button type="submit">Delete Room</button>
-              </form>
-            <% } %>
-          </div>
-        <% }); %>
-      <% } else { %>
-        <div class="no-room">
-          <p>No room available currently</p>
-        </div>
-      <% } %>
-    </div>
+        <label for="price">Price:</label>
+        <input type="number" name="price" id="price" placeholder="<%= serviceSingleData.servicePrice %>" required>
+        <br>
 
+        <label for="description">Service Description:</label>
+        <input name="description" id="description" placeholder="<%= serviceSingleData.serviceDescription %>" required>
+        <br><br>
+
+        <button type="submit">Confirm</button>
+    </form>
   </div>
 
   <!-- Footer -->

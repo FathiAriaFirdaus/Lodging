@@ -3,24 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add New Room</title>
+    <title>Manage Receptionist</title>
     <style>
-        /* Body */
+        /* Body Styling */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
         }
 
-        /* Navigation */
+        /* Navigation Styling */
         nav {
             background-color: #ffffff;
             padding: 15px 40px;
-            border-bottom: 0.3px solid #d8d8d8;
+            border-bottom: 1px solid #d8d8d8;
         }
 
         nav ul {
@@ -29,16 +26,12 @@
             margin: 0;
             display: flex;
             justify-content: flex-start;
-        }
-
-        nav ul li {
-            font-size: 16px;
-            margin-right: 20px;
+            align-items: center;
         }
 
         nav ul li a {
             text-decoration: none;
-            color: #000;
+            color: black;
             padding: 8px 16px;
             border-radius: 5px;
         }
@@ -48,14 +41,14 @@
             color: white;
         }
 
-        /* Main Content */
+        /* Main Content Styling */
         .container {
-            max-width: 600px;
+            max-width: 1200px;
             margin: 30px auto;
-            padding: 50px;
-            background-color: white;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            background-color: #fff;
             border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         h1 {
@@ -65,61 +58,68 @@
         }
 
         form {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        /* Form Items */
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            width: calc(50% - 10px); /* Ensures two elements per row */
-        }
-
-        .form-group label {
-            font-size: 1rem;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            font-size: 1rem;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
-        .form-group textarea {
-            resize: vertical;
+            margin: 10px 0;
+            display: inline-block;
         }
 
         button {
-            width: 100%;
-            padding: 10px;
-            font-size: 1rem;
             background-color: #007BFF;
             color: white;
+            padding: 10px 20px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            font-size: 1rem;
         }
 
         button:hover {
             background-color: #0056b3;
         }
 
-        /* Footer */
+        /* Card Container Styling */
+        .user-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .user-card {
+            background-color: #ffffff;
+            border: 1px solid #d8d8d8;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            flex: 1 1 calc(50% - 40px); /* 2 cards per row */
+            max-width: calc(50% - 40px);
+            box-sizing: border-box;
+        }
+
+        .user-card p {
+            margin: 10px 0;
+            font-size: 1rem;
+        }
+
+        .user-card form {
+            margin-top: 10px;
+        }
+
+        .user-card button {
+            width: 100%;
+            margin-top: 5px;
+        }
+
+        .no-users {
+            text-align: center;
+            color: #888;
+            font-size: 1.2rem;
+        }
+
+        /* Footer Styling */
         footer {
             background-color: #1d1d1d;
             color: #ffffff;
             padding: 40px 0;
-            margin-top: auto;
-            text-align: left;
         }
 
         .footer-container {
@@ -128,7 +128,8 @@
             flex-wrap: wrap;
             gap: 40px;
             margin-bottom: 30px;
-            padding: 0 70px;
+            padding-left: 70px;
+            padding-right: 70px;
         }
 
         .footer-container div {
@@ -161,12 +162,13 @@
             font-size: 0.8rem;
             color: #d8d8d8;
             margin-top: 20px;
-            text-align: center;
+            padding-left: 70px;
         }
     </style>
 </head>
 <body>
 
+    <!-- Navigation -->
     <nav>
         <ul>
           <li><a href="/homeAdmin">Home</a></li>
@@ -179,52 +181,40 @@
         </ul>
       </nav>
 
+    <!-- Main Content -->
     <div class="container">
-        <h1>Add New Room</h1>
+        <h1>Manage Services</h1>
 
-        <form action="/addRoom" method="post" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="roomName">Room Name</label>
-                <input type="text" id="roomName" name="roomName" required>
-            </div>
-
-            <div class="form-group">
-                <label for="roomType">Room Type</label>
-                <select name="roomType" id="roomType" required>
-                    <option value="single">Single</option>
-                    <option value="double">Double</option>
-                    <option value="suite">Suite</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="roomCapacity">Room Capacity</label>
-                <select name="roomCapacity" id="roomCapacity">
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="4">Four</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="roomPrice">Room Price</label>
-                <input type="number" id="roomPrice" name="roomPrice" required>
-            </div>
-
-            <div class="form-group">
-                <label for="roomDescription">Room Description</label>
-                <textarea name="roomDescription" id="roomDescription" rows="4" required></textarea>
-            </div>
-
-            <div class="form-group">
-                <label for="roomImage">Room Image</label>
-                <input type="file" name="roomImage" id="roomImage" accept="image/*" required>
-            </div>
-
-            <button type="submit">Add Room</button>
+        <form action="/addService" method="get">
+            <button type="submit">Add Service</button>
         </form>
+        <hr>
+
+        <div class="user-container">
+            <% if (serviceData.length > 0) { %>
+                <% serviceData.forEach(service => { %>
+                    <div class="user-card">
+                        <p><strong>Name:</strong> <%= service.serviceName %></p>
+                        <p><strong>Price:</strong> <%= service.servicePrice %></p>
+                        <p><strong>Description:</strong> <%= service.serviceDescription %></p>
+                        <form action="/editService/<%= service.id %>" method="get">
+                            <button type="submit">Edit Service</button>
+                        </form>
+                        <form action="/deleteService/<%= service.id %>" method="post">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit">Delete Service</button>
+                        </form>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <div class="no-users">
+                    <p>No services available currently</p>
+                </div>
+            <% } %>
+        </div>
     </div>
 
+    <!-- Footer -->
     <footer>
         <div class="footer-container">
             <div>
@@ -238,7 +228,7 @@
                 <h4>Services</h4>
                 <p>Customer Support</p>
                 <p>FAQ</p>
-                <p>Room Booking</p>
+                <p>Receptionist Management</p>
                 <p>Contact Us</p>
             </div>
             <div>

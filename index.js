@@ -51,6 +51,7 @@ app.use('/', reservationRouter);
 app.use('/', paymentRouter);
 
 
+// Mulai server dengan blok ini jika ingin menggunakan hosting
 sequelize.sync({ alter: true }) // Bisa pakai { force: true } untuk reset tabel (hati-hati!)
   .then(() => {
     console.log("Database synced successfully!");
@@ -63,6 +64,7 @@ sequelize.sync({ alter: true }) // Bisa pakai { force: true } untuk reset tabel 
     console.error("Failed to sync database:", err);
   });
 
+// // Mulai server dengan blok ini jika ingin menjalankan secara lokal
 // app.listen(port, () => {
 //   console.log(`Server running on port: ${port}`);
 // });
